@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\State;
 use Illuminate\Http\Request;
-use Yajra\DataTables\Contracts\DataTable;
 use Yajra\DataTables\Facades\DataTables;
 
 class StateController extends Controller
@@ -18,17 +17,17 @@ class StateController extends Controller
     }
     public function datatables()
     {
-        $states = State::select('id', 'name');
+        $states = State::select('id', 'name', 'created_at');
 
         return DataTables::of($states)
             ->addColumn('action', function ($state) {
                 // Concatenate PHP variables directly into the HTML string
                 return '<div class="btn-group btn-group-sm">
-                    <button data-id="' . $state->id . '" class="btn btn-success" onclick="editState(' . $state->id . ')">
+                    <button class="btn btn-success" onclick="getState(' . $state->id . ')">
                         <i class="fas fa-user-edit"></i>
                     </button>
-                    <button data-id="' . $state->id . '" class="btn btn-danger ' . ($state->count < 1 ? 'delete' : 'disabled') . '">
-                        <i class="far fa-trash-alt"></i> ( ' . $state->count . ' )
+                    <button  class="btn btn-danger" onclick="deleteState(' . $state->id . ')" id="row_' . $state->id . '">
+                        <i class="far fa-trash-alt"></i> 
                     </button>
                 </div>';
             })
@@ -59,8 +58,6 @@ class StateController extends Controller
         ]);
 
         return redirect()->route('states.index')->with('success', 'State added successfully.');
-
-
     }
 
     /**
@@ -68,18 +65,17 @@ class StateController extends Controller
      */
     public function show($id)
     {
-        return $id;
-        // $data = State::find($id);
-        // return $data;
+        $data = State::find($id);
+        return $data;
     }
-    
+
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(State $state)
     {
-        return view('states.edit', compact('state'));
+        // return view('states.edit', compact('state'));
     }
 
     /**
@@ -90,12 +86,13 @@ class StateController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
         ]);
+        // return $state;
 
         $state->update([
             'name' => $request->name,
         ]);
 
-        return redirect()->route('states.index')->with('success', 'State updated successfully.');
+        return response()->json(['status' => true, 'message' => 'State updated successfully']);
     }
 
     /**
@@ -104,6 +101,6 @@ class StateController extends Controller
     public function destroy(State $state)
     {
         $state->delete();
-        return redirect()->route('states.index')->with('success', 'State deleted successfully.');
+        return response()->json(['status' => true, 'message' => 'State deleted successfully']);
     }
 }

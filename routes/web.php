@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StateController;
+use App\Http\Controllers\CityController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,11 +29,11 @@ Route::group(['middleware' => 'admin', 'prefix' => 'admin'], function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('states', StateController::class);
+    Route::resource('cities', CityController::class);
+    Route::post('/ajax', [CityController::class, 'addAjax'])->name('addAjax');
     Route::get('state/datatables', [StateController::class, 'datatables'])->name('states.datatables');
-
+    Route::get('city/datatables', [CityController::class, 'datatables'])->name('cities.datatables');
 });
-
-
 
 // Route::middleware('auth')->group(function () {
 //     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

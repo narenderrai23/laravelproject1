@@ -9,7 +9,10 @@ class State extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name',
-    ];
+    protected $fillable = ['name'];
+
+    public function cities()
+    {
+        return $this->hasMany(City::class); // Define the relationship with the City model
+    }
 }

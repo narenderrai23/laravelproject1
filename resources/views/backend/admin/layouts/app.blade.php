@@ -11,6 +11,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="Premium Multipurpose Admin" name="description" />
     <meta content="{{ config('app.name') }}" name="author" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
     <!-- App favicon -->
     <link rel="shortcut icon" href="../assets/images/favicon.png">
 
@@ -79,7 +81,13 @@
     <script src="../assets/libs/simplebar/simplebar.min.js"></script>
     <script src="../assets/libs/feather-icons/feather.min.js"></script>
     <script src="../assets/js/app.js"></script>
-
+    <script>
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+    </script>
     @stack('scripts')
 </body>
 

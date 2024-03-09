@@ -76,8 +76,9 @@
                         <span class="menu-item" data-key="t-branch">City</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="add-city" data-key="add-city">Add City</a></li>
-                        <li><a href="manage-cities" data-key="edit-city">Manage City</a></li>
+                        {{-- <li><a href="add-city" data-key="add-city">Add City</a></li> --}}
+                        <li><a href="cities" data-key="cities">Cities</a></li>
+                        <li><a href="states" data-key="states">States</a></li>
                     </ul>
                 </li>
 
