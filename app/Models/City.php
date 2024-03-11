@@ -15,4 +15,8 @@ class City extends Model
     {
         return $this->belongsTo(State::class); // Define the relationship with the State model
     }
+
+    public function branch(){
+        return $this->hasMany(State::class);
+    }
 }

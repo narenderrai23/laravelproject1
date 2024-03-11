@@ -49,8 +49,8 @@
                         <span class="menu-item" data-key="t-student">Student</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="add-students" data-key="add-students">Add Student</a></li>
-                        <li><a href="manage-students" data-key="edit-students">Manage Student</a></li>
+                        <li><a href="students" data-key="students">Add Student</a></li>
+                        <li><a href="students" data-key="edit-students">Manage Student</a></li>
                         <li><a href="filter-students" data-key="students-excel">Excel Student</a></li>
                         <li><a href="students" data-key="students-excel">Filter Student</a></li>
                         <li><a href="students-completed" data-key="students-excel">Completed Student</a></li>
@@ -63,9 +63,7 @@
                         <span class="menu-item" data-key="t-branch">Branch</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="add-branch" data-key="add-branch">Add Branch</a></li>
-                        <li><a href="manage-branch" data-key="edit-branch">Manage Branch</a></li>
-                        <!-- <li><a href="expired-branch" data-key="branch">Expired Branch</a></li> -->
+                        <li><a href="branches" data-key="branches">Branch</a></li>
                         <li><a href="filter-branch" data-key="branch-excel">Branch Excel</a></li>
                     </ul>
                 </li>
@@ -76,7 +74,6 @@
                         <span class="menu-item" data-key="t-branch">City</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        {{-- <li><a href="add-city" data-key="add-city">Add City</a></li> --}}
                         <li><a href="cities" data-key="cities">Cities</a></li>
                         <li><a href="states" data-key="states">States</a></li>
                     </ul>
@@ -88,9 +85,8 @@
                         <span class="menu-item" data-key="t-course">Course</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="manage-courses" data-key="manage-courses">Manage Course</a></li>
-                        <li><a href="course-category" data-key="add-course-category">Course Category</a></li>
-                        <li><a href="add-courses" data-key="add-courses">Add courses</a></li>
+                        <li><a href="courses" data-key="courses">Course</a></li>
+                        <li><a href="categories" data-key="categories">Category</a></li>
                     </ul>
                 </li>
 
@@ -100,7 +96,7 @@
                         <span class="menu-item" data-key="t-course">Settings</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="profile" data-key="manage-courses">Contacts Profile</a></li>
+                        <li><a href="profile" data-key="courses">Contacts Profile</a></li>
                         <li><a href="importer" data-key="importer">Importer</a></li>
                     </ul>
                 </li>

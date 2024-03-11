@@ -17,7 +17,7 @@
                     </button>
                 </div>
                 <div class="card-body">
-                    <table id="stateTable" class="table table-hover table-striped">
+                    <table id="table" class="table table-hover table-striped">
                         <thead class="table-dark">
                             <tr>
                                 <th>ID</th>
@@ -63,7 +63,8 @@
 
                         <div class="form-group mb-3">
                             <label for="code">Code:</label>
-                            <input type="text" class="form-control" name="code" required maxlength="3">
+                            <input type="text" class="form-control text-uppercase" name="code" required
+                                maxlength="3">
                         </div>
 
                         <button type="submit" class="btn btn-primary">Create City</button>
@@ -105,7 +106,7 @@
 
                         <div class="form-group mb-3">
                             <label for="code">Code:</label>
-                            <input type="text" class="form-control" id="code" name="code" required
+                            <input type="text" class="form-control text-uppercase" id="code" name="code" required
                                 maxlength="3">
                         </div>
 
@@ -127,8 +128,7 @@
 
     <script>
         $(document).ready(function() {
-            var table = initializeDataTable('#stateTable');
-            new Choices("#state_id");
+            const table = initializeDataTable('#table');
         });
 
         initializeDataTable = (tableId) => {
@@ -169,7 +169,7 @@
 
         $("#addForm").submit(function(e) {
             e.preventDefault();
-            var data = new FormData(this);
+            const data = new FormData(this);
             $.ajax({
                 type: "POST",
                 url: "{{ route('cities.store') }}",
@@ -178,6 +178,8 @@
                 contentType: false,
                 success: function(data) {
                     $('.modal').modal('hide');
+                    $('#addForm').trigger("reset");
+                    $('#table').DataTable().ajax.reload();
                 },
                 error: function(error) {
                     console.error(error);
@@ -187,10 +189,10 @@
 
         $('#updateForm').submit(function(e) {
             e.preventDefault();
-            var stateId = $("#id").val();
+            const stateId = $("#id").val();
             const formData = new FormData(this);
             $.ajax({
-                url: 'states/' + stateId,
+                url: 'cities/' + stateId,
                 method: 'POST',
                 data: formData,
                 processData: false,
@@ -198,7 +200,7 @@
                 success: function(response) {
                     if (response.status) {
                         $('.modal').modal('hide');
-                        $('#stateTable').DataTable().ajax.reload();
+                        $('#table').DataTable().ajax.reload();
                     }
                 },
                 error: function(error) {
@@ -214,9 +216,10 @@
                 success: function(response) {
                     console.log(response);
                     $('#edit').modal('show');
-                    $('#id').val(response.id);
-                    $('#name').val(response.name);
-                    $('#code').val(response.code);
+                    $('[name="state_id"]').val(response.state_id);
+                    $('[name="id"]').val(response.id);
+                    $('[name="name"]').val(response.name);
+                    $('[name="code"]').val(response.code);
                 },
                 error: function(xhr, status, error) {
                     console.error(xhr.responseText);

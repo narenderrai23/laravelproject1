@@ -51,7 +51,6 @@ class CityController extends Controller
     }
 
 
-
     /**
      * Show the form for creating a new resource.
      */
@@ -70,10 +69,11 @@ class CityController extends Controller
             'code' => 'required|max:3',
             'state_id' => 'required|integer|exists:states,id',
         ]);
+        $uppercaseCode = strtoupper($request->code);
 
         City::create([
             'name' => $request->name,
-            'code' => $request->code,
+            'code' => $uppercaseCode,
             'state_id' => $request->state_id,
         ]);
 
@@ -102,7 +102,20 @@ class CityController extends Controller
      */
     public function update(Request $request, City $city)
     {
-        //
+        $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'code' => ['required', 'string', 'max:255'],
+        ]);
+        // return $state;
+        $uppercaseCode = strtoupper($request->code);
+
+        $city->update([
+            'name' => $request->name,
+            'code' => $uppercaseCode,
+            'state_id' => $request->state_id,
+        ]);
+
+        return response()->json(['status' => true, 'message' => 'State updated successfully']);
     }
 
     /**
@@ -110,6 +123,7 @@ class CityController extends Controller
      */
     public function destroy(City $city)
     {
-        //
+        $city->delete();
+        return response()->json(['status' => true, 'message' => 'State deleted successfully']);
     }
 }

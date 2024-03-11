@@ -9,9 +9,9 @@
         <div class="col-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="card-title" style="text-align: center;">Add State</h4>
+                    <h4 class="card-title" style="text-align: center;">Add Category</h4>
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add">
-                        Add State
+                        Add Category
                     </button>
                 </div>
                 <div class="card-body">
@@ -101,17 +101,17 @@
 
             $('#updateForm').submit(function(e) {
                 e.preventDefault();
-                var stateId = $("#id").val();
+                var categoryId = $("#id").val();
                 const formData = new FormData(this);
                 $.ajax({
-                    url: 'states/' + stateId,
+                    url: 'categories/' + categoryId,
                     method: 'POST',
                     data: formData,
                     processData: false,
                     contentType: false,
                     success: function(response) {
                         if (response.status) {
-                            $('#edit').modal('hide');
+                            $('.modal').modal('hide');
                             $('#table').DataTable().ajax.reload();
                         }
                     },
@@ -127,7 +127,7 @@
             const data = new FormData(this);
             $.ajax({
                 type: "POST",
-                url: "{{ route('states.store') }}",
+                url: "{{ route('categories.store') }}",
                 data: data,
                 processData: false,
                 contentType: false,
@@ -146,18 +146,22 @@
             return $(tableId).DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: '{{ route('states.datatables') }}',
+                ajax: '{{ route('categories.datatables') }}',
                 columns: [{
                         data: 'id',
+                        name: 'id'
                     },
                     {
                         data: 'name',
+                        name: 'name'
                     },
                     {
                         data: 'created_at',
+                        name: 'created_at'
                     },
                     {
                         data: 'action',
+                        name: 'action',
                         orderable: false,
                         searchable: false
                     }
@@ -165,9 +169,9 @@
             });
         }
 
-        function getState(stateId) {
+        function getCategory(categoryId) {
             $.ajax({
-                url: 'states/' + stateId,
+                url: 'categories/' + categoryId,
                 type: 'GET',
                 success: function(response) {
                     $('#edit').modal('show');
@@ -180,13 +184,13 @@
             });
         }
 
-        function deleteState(stateId) {
+        function deleteCategory(categoryId) {
             $.ajax({
-                url: 'states/' + stateId,
+                url: 'categories/' + categoryId,
                 type: 'DELETE',
                 success: function(response) {
                     if (response.status) {
-                        $('#row_' + stateId).closest('tr').remove();
+                        $('#row_' + categoryId).closest('tr').remove();
                     }
                 },
                 error: function(xhr, status, error) {

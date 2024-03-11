@@ -3,6 +3,9 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StateController;
 use App\Http\Controllers\CityController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CourseController;
+use App\Http\Controllers\BranchController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,10 +32,25 @@ Route::group(['middleware' => 'admin', 'prefix' => 'admin'], function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::resource('states', StateController::class);
-    Route::resource('cities', CityController::class);
-    Route::post('/ajax', [CityController::class, 'addAjax'])->name('addAjax');
     Route::get('state/datatables', [StateController::class, 'datatables'])->name('states.datatables');
+
+
+    Route::resource('cities', CityController::class);
     Route::get('city/datatables', [CityController::class, 'datatables'])->name('cities.datatables');
+
+
+    Route::resource('categories', CategoryController::class);
+    Route::get('category/datatables', [CategoryController::class, 'datatables'])->name('categories.datatables');
+
+
+    Route::resource('courses', CourseController::class);
+    Route::get('course/datatables', [CourseController::class, 'datatables'])->name('courses.datatables');
+
+
+    Route::resource('branches', BranchController::class);
+    Route::get('branch/datatables', [BranchController::class, 'datatables'])->name('branches.datatables');
+    Route::get('branches/generate-branch-code/{city_id}', [BranchController::class, 'generateBranchCode'])->name('fetch.cities');
+
 });
 
 // Route::middleware('auth')->group(function () {
