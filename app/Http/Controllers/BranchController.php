@@ -34,10 +34,10 @@ class BranchController extends Controller
         return DataTables::of($courses)
             ->addColumn('action', function ($course) {
                 return '<div class="btn-group btn-group-sm">
-                    <button class="btn btn-success" onclick="getCourse(' . $course->id . ')">
+                    <button class="btn btn-success" onclick="getBranch(' . $course->id . ')">
                         <i class="fas fa-user-edit"></i>
                     </button>
-                    <button  class="btn btn-danger" onclick="deleteCourse(' . $course->id . ')" id="row_' . $course->id . '">
+                    <button  class="btn btn-danger" onclick="deleteBranch(' . $course->id . ')" id="row_' . $course->id . '">
                         <i class="far fa-trash-alt"></i> 
                     </button>
                 </div>';
@@ -57,6 +57,8 @@ class BranchController extends Controller
         $branchCode = $cityCode . now()->format('Ymd') . ($lastBranchId);
         return response()->json($branchCode);
     }
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -103,16 +105,25 @@ class BranchController extends Controller
             'email' => $request->email,
             'password' => $request->password,
         ]);
-
-        return response()->json(['status' => true, 'message' => 'Course added successfully']);
+        return response()->json(['status' => true, 'message' => 'Branch added successfully']);
     }
 
 
     public function show($id)
     {
+        $branch = Branch::select('branches.*', 'cities.state_id')
+            ->join('cities', 'branches.city_id', '=', 'cities.id')
+            ->where('branches.id', $id)
+            ->first();
+        return response()->json($branch);
+    }
+
+    public function fetchCity($id)
+    {
         $cities = City::where('state_id', $id)->select('id', 'name')->get();
         return response()->json($cities);
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -127,14 +138,45 @@ class BranchController extends Controller
      */
     public function update(Request $request, Branch $branch)
     {
-        //
+        $this->validate($request, [
+            'city_id' => 'required|integer|exists:cities,id',
+            'name' => 'required|string|max:100',
+            'head' => 'required|string|max:100',
+            'category' => 'required|in:authorized,training,learning',
+            'phone' => 'required|max:20',
+            'joining_date' => 'required|date',
+            'address' => 'required|string',
+            'c_address' => 'required|string',
+            'email' => 'required|email|max:100',
+        ]);
+
+
+        $joining_date = $request->joining_date;
+        $till_date = date('Y-m-d', strtotime($joining_date . ' +3 years'));
+
+        $branch->update([
+            'city_id' => $request->city_id,
+            'name' => $request->name,
+            'head' => $request->head,
+            'category' => $request->category,
+            'phone' => $request->phone,
+            'joining_date' => $request->joining_date,
+            'till_date' => $till_date,
+            'address' => $request->address,
+            'c_address' => $request->c_address,
+            'email' => $request->email,
+            'password' => $request->password,
+        ]);
+        return response()->json(['status' => true, 'message' => 'Branch added successfully']);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Branch $branch)
+
+    public function destroy(Branch $category)
     {
-        //
+        $category->delete();
+        return response()->json(['status' => true, 'message' => 'Category deleted successfully']);
     }
 }

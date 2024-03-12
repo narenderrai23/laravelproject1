@@ -76,6 +76,7 @@
                     <ul class="sub-menu" aria-expanded="false">
                         <li><a href="cities" data-key="cities">Cities</a></li>
                         <li><a href="states" data-key="states">States</a></li>
+                        <li><a href="districts" data-key="districts">District</a></li>
                     </ul>
                 </li>
 

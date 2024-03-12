@@ -22,12 +22,25 @@ class Branch extends Model
         'c_address',
         'email',
         'password',
-        'status',
-        'reset_otp',
+    ];
+
+   
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'password' => 'hashed',
     ];
 
     public function cities()
     {
         return $this->belongsTo(City::class); // Define the relationship with the State model
+    }
+
+    public function student()
+    {
+        return $this->hasMany(Student::class);
     }
 }

@@ -11,8 +11,8 @@ class Course extends Model
 
     protected $fillable = [
         'name',
-        'category_id',
         'code',
+        'category_id',
         'course_duration',
         'duration_time',
         'total_fee',
@@ -24,5 +24,10 @@ class Course extends Model
     public function state()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function student()
+    {
+        return $this->hasMany(Student::class);
     }
 }

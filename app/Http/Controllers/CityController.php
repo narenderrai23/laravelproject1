@@ -6,7 +6,6 @@ use App\Models\City;
 use App\Models\State;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
-
 use Illuminate\Support\Facades\DB;
 
 

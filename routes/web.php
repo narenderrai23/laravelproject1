@@ -6,6 +6,9 @@ use App\Http\Controllers\CityController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\BranchController;
+use App\Http\Controllers\StudentController;
+use App\Http\Controllers\EducationController;
+use App\Http\Controllers\DistrictController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -50,6 +53,24 @@ Route::group(['middleware' => 'admin', 'prefix' => 'admin'], function () {
     Route::resource('branches', BranchController::class);
     Route::get('branch/datatables', [BranchController::class, 'datatables'])->name('branches.datatables');
     Route::get('branches/generate-branch-code/{city_id}', [BranchController::class, 'generateBranchCode'])->name('fetch.cities');
+    Route::get('branches/fetch-city/{city_id}', [BranchController::class, 'fetchCity']);
+
+
+    Route::resource('educations', EducationController::class);
+    Route::get('education/datatables', [EducationController::class, 'datatables'])->name('educations.datatables');
+
+
+    Route::resource('districts', DistrictController::class);
+    Route::get('district/datatables', [DistrictController::class, 'datatables'])->name('districts.datatables');
+
+
+
+    Route::resource('students', StudentController::class);
+    Route::get('student/datatables', [StudentController::class, 'datatables'])->name('students.datatables');
+    Route::get('students/branch-code/{city_id}', [StudentController::class, 'branchCode']);
+    Route::get('students/course-code/{city_id}', [StudentController::class, 'courseDetails']);
+    Route::get('students/fetch-city/{city_id}', [StudentController::class, 'fetchCity']);
+    Route::get('students/district/{city_id}', [DistrictController::class, 'fetchDistrict']);
 
 });
 
