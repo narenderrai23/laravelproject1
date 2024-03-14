@@ -21,7 +21,7 @@ class Course extends Model
         'course_type',
     ];
 
-    public function state()
+    public function category()
     {
         return $this->belongsTo(Category::class);
     }

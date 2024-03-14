@@ -20,9 +20,4 @@ class State extends Model
     {
         return $this->hasMany(District::class); // Define the relationship with the City model
     }
-
-    public function student()
-    {
-        return $this->hasMany(Student::class);
-    }
 }

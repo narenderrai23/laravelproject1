@@ -5,19 +5,19 @@
     <div class="navbar-brand-box">
         <a href="index" class="logo logo-dark text-center">
             <span class="logo-sm">
-                <img src="../assets/image/logo.gif" alt="{{ config('app.name') }} LOGO" height="22">
+                <img src="{{ asset('assets/image/logo.gif') }}" alt="{{ config('app.name') }} LOGO" height="22">
             </span>
             <span class="logo-lg">
-                <img src="../assets/image/logo.gif" alt="{{ config('app.name') }} LOGO" class="w-50">
+                <img src="{{ asset('assets/image/logo.gif') }}" alt="{{ config('app.name') }} LOGO" class="w-50">
             </span>
         </a>
 
         <a href="index" class="logo logo-light text-center">
             <span class="logo-lg">
-                <img src="../assets/image/logo.gif" alt="{{ config('app.name') }} LOGO" class="w-50">
+                <img src="{{ asset('assets/image/logo.gif') }}" alt="{{ config('app.name') }} LOGO" class="w-50">
             </span>
             <span class="logo-sm">
-                <img src="../assets/image/favicon.png" alt="{{ config('app.name') }} LOGO" height="22">
+                <img src="{{ asset('assets/image/favicon.png') }}" alt="{{ config('app.name') }} LOGO" height="22">
             </span>
         </a>
     </div>
@@ -49,7 +49,7 @@
                         <span class="menu-item" data-key="t-student">Student</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="students" data-key="students">Add Student</a></li>
+                        <li><a href="students/create" data-key="students/create">Add Student</a></li>
                         <li><a href="students" data-key="edit-students">Manage Student</a></li>
                         <li><a href="filter-students" data-key="students-excel">Excel Student</a></li>
                         <li><a href="students" data-key="students-excel">Filter Student</a></li>

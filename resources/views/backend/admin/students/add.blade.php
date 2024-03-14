@@ -1,11 +1,11 @@
 @extends('backend.admin.layouts.app')
 @section('title', 'Add Students - Admin')
 @section('nav', 'Add Students')
-@push('scripts')
+@push('links')
     <!-- choices css -->
-    <link href="../assets/libs/choices.js/public/assets/styles/choices.min.css" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/libs/choices.js/public/assets/styles/choices.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- datepicker css -->
-    <link rel="stylesheet" href="../assets/libs/flatpickr/flatpickr.min.css">
+    <link rel="stylesheet" href="{{ asset('assets/libs/flatpickr/flatpickr.min.css') }}">
 @endpush
 @section('main')
     <div class="row">
@@ -17,9 +17,11 @@
                         'method' => 'POST',
                         'id' => 'addForm',
                         'class' => 'needs-validation',
+                        'novalidate',
                     ]) !!}
                     <div class="row">
                         <div class="col-sm-12 headinginfo h4 py-3 my-4">1. Branch/student Details</div>
+
                         <div class="col-sm-12 col-md-4 mb-3">
                             {!! Form::label('date_admission', 'Date Of Admission', ['class' => 'form-label']) !!}
                             {!! Form::text('date_admission', null, [
@@ -132,13 +134,13 @@
                             {!! Form::label('gender', 'Gender') !!}
                             <div class="my-2">
                                 <label class="form-check form-check-inline">
-                                    {!! Form::radio('gender', 'Male', true, ['class' => 'form-check-input']) !!} Male
+                                    {!! Form::radio('gender', 'male', true, ['class' => 'form-check-input']) !!} Male
                                 </label>
                                 <label class="form-check form-check-inline">
-                                    {!! Form::radio('gender', 'Female', false, ['class' => 'form-check-input']) !!} Female
+                                    {!! Form::radio('gender', 'female', false, ['class' => 'form-check-input']) !!} Female
                                 </label>
                                 <label class="form-check form-check-inline">
-                                    {!! Form::radio('gender', 'Transgender', false, ['class' => 'form-check-input']) !!} Transgender
+                                    {!! Form::radio('gender', 'transgender', false, ['class' => 'form-check-input']) !!} Other
                                 </label>
                             </div>
                         </div>
@@ -270,9 +272,9 @@
 @endsection
 
 @push('scripts')
-    <script src="../assets/libs/flatpickr/flatpickr.min.js"></script>
-    <script src="../assets/libs/choices.js/public/assets/scripts/choices.min.js"></script>
-
+    <script src="{{ asset('assets/libs/flatpickr/flatpickr.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/choices.js/public/assets/scripts/choices.min.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/form-validation.init.js') }}"></script>
     <script>
         function SelectOption(response, select_dropdown, selectedCityName) {
             select_dropdown.empty().append($("<option>").text("Select").val(""));
@@ -282,27 +284,6 @@
                 );
             });
         }
-
-
-        $("#state_id").change(function() {
-            var stateId = $(this).val();
-            makeAjaxRequest(
-                'students/district/' + stateId,
-                function(response) {
-                    SelectOption(response, $('[name="district_id"]'), "name");
-                }
-            );
-        });
-
-        $('#branch_id').change(function() {
-            const cityId = $(this).val();
-            makeAjaxRequest(
-                'students/branch-code/' + cityId,
-                function(response) {
-                    $('#code').val(response.code);
-                }
-            );
-        });
 
         function makeAjaxRequest(url, successCallback, errorCallback) {
             return $.ajax({
@@ -315,22 +296,35 @@
             });
         }
 
-
-        $('#course_id').change(function() {
-            var CourseId = $(this).val();
-            makeAjaxRequest(
-                'students/course-code/' + CourseId,
-                function(response) {
-                    $('[name="course_name"]').val(response.name);
-                    $('[name="cduration"]').val(`${response.course_duration} ${response.duration_time}`);
-                    $('[name="total_fee"]').val(response.total_fee);
-                    $('[name="course_type"]').val(response.course_type);
-                    $('[name="eligibility"]').val(response.eligibility);
-                }
-            );
+        $("#state_id").change(function() {
+            var stateId = $(this).val();
+            const url = "{{ route('students.district', ':stateId') }}".replace(':stateId', stateId);
+            makeAjaxRequest(url, function(response) {
+                SelectOption(response, $('[name="district_id"]'), "name");
+            });
         });
 
-        flatpickr('#datepicker', {
+        $('#branch_id').change(function() {
+            const cityId = $(this).val();
+            const url = "{{ route('students.branch-code', ':cityId') }}".replace(':cityId', cityId);
+            makeAjaxRequest(url, function(response) {
+                $('#code').val(response.code);
+            });
+        });
+
+        $('#course_id').change(function() {
+            var courseId = $(this).val();
+            const url = "{{ route('students.course-code', ':courseId') }}".replace(':courseId', courseId);
+            makeAjaxRequest(url, function(response) {
+                $('[name="course_name"]').val(response.name);
+                $('[name="cduration"]').val(`${response.course_duration} ${response.duration_time}`);
+                $('[name="total_fee"]').val(response.total_fee);
+                $('[name="course_type"]').val(response.course_type);
+                $('[name="eligibility"]').val(response.eligibility);
+            });
+        });
+
+        $("##datepicker").flatpickr({
             maxDate: 'today',
             defaultDate: 'today',
         });

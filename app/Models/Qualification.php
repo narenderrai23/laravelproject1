@@ -17,4 +17,9 @@ class Qualification extends Model
         'percentage',
     ];
 
+    // public function students()
+    // {
+    //     return $this->hasMany(Student::class);
+    // }
+
 }

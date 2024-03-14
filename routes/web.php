@@ -29,7 +29,7 @@ Route::get('/', function () {
 Route::view('/dashboard', 'dashboard')->name('dashboard')->middleware('admin');
 
 Route::group(['middleware' => 'admin', 'prefix' => 'admin'], function () {
-    Route::view('/dashboard', 'backend.admin.dashboard')->name('admin.dashboard');
+    Route::view('/', 'backend.admin.dashboard')->name('admin.dashboard');
     Route::view('/profile', 'backend.admin.profile')->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -67,10 +67,10 @@ Route::group(['middleware' => 'admin', 'prefix' => 'admin'], function () {
 
     Route::resource('students', StudentController::class);
     Route::get('student/datatables', [StudentController::class, 'datatables'])->name('students.datatables');
-    Route::get('students/branch-code/{city_id}', [StudentController::class, 'branchCode']);
-    Route::get('students/course-code/{city_id}', [StudentController::class, 'courseDetails']);
-    Route::get('students/fetch-city/{city_id}', [StudentController::class, 'fetchCity']);
-    Route::get('students/district/{city_id}', [DistrictController::class, 'fetchDistrict']);
+    Route::get('students/branch-code/{city_id}', [StudentController::class, 'branchCode'])->name('students.branch-code');
+    Route::get('students/course-code/{city_id}', [CourseController::class, 'show'])->name('students.course-code');
+    Route::get('students/fetch-city/{city_id}', [StudentController::class, 'fetchCity'])->name('students.city');
+    Route::get('students/district/{city_id}', [DistrictController::class, 'fetchDistrict'])->name('students.district');
 
 });
 

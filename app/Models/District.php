@@ -16,4 +16,9 @@ class District extends Model
         return $this->belongsTo(State::class); // Define the relationship with the State model
     }
 
+    public function student()
+    {
+        return $this->hasMany(Student::class);
+    }
+
 }

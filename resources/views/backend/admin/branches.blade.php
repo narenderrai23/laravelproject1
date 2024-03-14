@@ -1,12 +1,12 @@
 @extends('backend.admin.layouts.app')
 @section('title', 'Login - Admin')
 @section('nav', 'Courses')
-@push('scripts')
+@push('links')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <!-- choices css -->
-    <link href="../assets/libs/choices.js/public/assets/styles/choices.min.css" rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/libs/choices.js/public/assets/styles/choices.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- datepicker css -->
-    <link rel="stylesheet" href="../assets/libs/flatpickr/flatpickr.min.css">
+    <link rel="stylesheet" href="{{ asset('assets/libs/flatpickr/flatpickr.min.css') }}">
 @endpush
 @section('main')
     <div class="row">
@@ -280,9 +280,9 @@
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <!-- choices js -->
-    <script src="../assets/libs/choices.js/public/assets/scripts/choices.min.js"></script>
+    <script src="{{ asset('assets/libs/choices.js/public/assets/scripts/choices.min.js') }}"></script>
     <!-- datepicker js -->
-    <script src="../assets/libs/flatpickr/flatpickr.min.js"></script>
+    <script src="{{ asset('assets/libs/flatpickr/flatpickr.min.js') }}"></script>
     <script>
         $(document).ready(function() {
             const table = initializeDataTable('#table');

@@ -5,20 +5,20 @@
             <div class="navbar-brand-box">
                 <a href="index.php" class="logo logo-dark">
                     <span class="logo-sm">
-                        <img src="../assets/image/favicon.png" alt="" height="22">
+                        <img src="{{ asset('assets/image/favicon.png') }}" alt="" height="22">
                     </span>
                     <span class="logo-lg">
-                        <img src="../assets/image/favicon.png" alt="" height="22"> <span
+                        <img src="{{ asset('assets/image/favicon.png') }}" alt="" height="22"> <span
                             class="logo-txt">{{ config('app.name') }}</span>
                     </span>
                 </a>
 
                 <a href="index.php" class="logo logo-light">
                     <span class="logo-sm">
-                        <img src="../assets/image/favicon.png" alt="" height="22">
+                        <img src="{{ asset('assets/image/favicon.png') }}" alt="" height="22">
                     </span>
                     <span class="logo-lg">
-                        <img src="../assets/image/favicon.png" alt="" height="22"> <span
+                        <img src="{{ asset('assets/image/favicon.png') }}" alt="" height="22"> <span
                             class="logo-txt">{{ config('app.name') }}</span>
                     </span>
                 </a>

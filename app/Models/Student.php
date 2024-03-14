@@ -14,23 +14,25 @@ class Student extends Model
         'branch_id',
         'enrollment',
         'course_id',
-        'course',
+        'till_date',
         'name',
         'father_name',
         'father_occupation',
         'student_dob',
-        'gender_id',
-        'phone',
+        'gender',
         'profile_image',
         'address1',
         'address2',
-        'country_id',
         'state_id',
-        'city_id',
-        'course_status_id',
-        'education_id',
+        'district_id',
+        'phone',
+        'wphone',
         'email',
-        'student_whatsapp_phone',
+        'pqualification',
+        'qualification',
+        'student_status',
+        'created_by',
+        'approve',
     ];
 
     public function course()
@@ -42,22 +44,11 @@ class Student extends Model
     {
         return $this->belongsTo(Branch::class);
     }
-  
 
-    public function education()
+
+    public function district()
     {
-        return $this->belongsTo(Education::class);
+        return $this->belongsTo(District::class);
     }
 
-
-    public function state()
-    {
-        return $this->belongsTo(State::class);
-    }
-
-    public function city()
-    {
-        return $this->belongsTo(City::class);
-    }
-  
 }
