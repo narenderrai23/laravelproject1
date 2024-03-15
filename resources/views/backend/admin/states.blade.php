@@ -1,6 +1,6 @@
 @extends('backend.admin.layouts.app')
 @section('title', 'Login - Admin')
-@section('nav', 'index')
+@section('nav', 'State')
 @push('links')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
 @endpush

@@ -140,7 +140,7 @@
                                     {!! Form::radio('gender', 'female', false, ['class' => 'form-check-input']) !!} Female
                                 </label>
                                 <label class="form-check form-check-inline">
-                                    {!! Form::radio('gender', 'transgender', false, ['class' => 'form-check-input']) !!} Other
+                                    {!! Form::radio('gender', 'other', false, ['class' => 'form-check-input']) !!} Other
                                 </label>
                             </div>
                         </div>
@@ -285,7 +285,7 @@
             });
         }
 
-        function makeAjaxRequest(url, successCallback, errorCallback) {
+        function makeAjaxRequest(url, successCallback) {
             return $.ajax({
                 url: url,
                 type: 'GET',
@@ -324,7 +324,7 @@
             });
         });
 
-        $("##datepicker").flatpickr({
+        $("#datepicker").flatpickr({
             maxDate: 'today',
             defaultDate: 'today',
         });

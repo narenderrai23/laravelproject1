@@ -1,198 +1,364 @@
 @extends('backend.admin.layouts.app')
-@section('title', 'Login - Admin')
-@section('nav', 'index')
+@section('title', 'Add Students - Admin')
+@section('nav', 'Add Students')
 @push('links')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+    <!-- choices css -->
+    <link href="{{ asset('assets/libs/choices.js/public/assets/styles/choices.min.css') }}" rel="stylesheet" type="text/css" />
+    <!-- datepicker css -->
+    <link rel="stylesheet" href="{{ asset('assets/libs/flatpickr/flatpickr.min.css') }}">
 @endpush
 @section('main')
     <div class="row">
-        <div class="col-12 grid-margin stretch-card">
+        <div class="col-lg-12">
             <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="card-title" style="text-align: center;">Add State</h4>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add">
-                        Add State
-                    </button>
-                </div>
                 <div class="card-body">
-                    <table id="table" class="table table-hover table-striped">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>ID</th>
-                                <th>Name</th>
-                                <th>Created</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
+                    {{ $data }}
+                    {!! Form::open([
+                        'route' => 'students.store',
+                        'method' => 'POST',
+                        'id' => 'addForm',
+                        'class' => 'needs-validation',
+                        'novalidate',
+                    ]) !!}
+                    <div class="row">
+                        <div class="col-sm-12 headinginfo h4 py-3 my-4">1. Branch/student Details</div>
 
-
-    <!-- Create  Modal -->
-    <div class="modal fade" id="add">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addLabel">Add</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="addForm" method="POST">
-                        @csrf
-
-                        <div class="mb-3">
-                            <label for="name" class="form-label">{{ __('Name') }}</label>
-                            <input type="text" class="form-control" id="name" name="name" required autofocus
-                                autocomplete="name">
-                            @error('name')
-                                <div class="text-danger">{{ $message }}</div>
-                            @enderror
+                        <div class="col-sm-12 col-md-4 mb-3">
+                            {!! Form::label('date_admission', 'Date Of Admission', ['class' => 'form-label']) !!}
+                            {!! Form::text('date_admission', null, [
+                                'class' => 'form-control',
+                                'id' => 'datepicker',
+                                'placeholder' => 'Please select Date Time',
+                                'required',
+                            ]) !!}
                         </div>
 
-                        <button type="submit" class="btn btn-primary">{{ __('Save') }}</button>
-
-                        @if (session('status') === 'profile-updated')
-                            <p class="text-success">{{ __('Saved.') }}</p>
-                        @endif
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <!-- Update  Modal -->
-    <div class="modal fade" id="edit">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Update</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="updateForm" method="POST">
-                        @csrf
-                        @method('PUT')
-                        <input type="hidden" name="id" id="id">
-                        <div class="form-group mb-3">
-                            <label for="name">Name:</label>
-                            <input type="text" class="form-control" id="stname" name="name">
+                        <div class="col-sm-12 col-md-4 mb-3">
+                            {!! Form::label('branch_id', 'Branch', ['class' => 'form-label']) !!}
+                            {!! Form::select('branch_id', $branches->pluck('name', 'id'), $data['branch_id'], [
+                                'class' => 'form-select',
+                                'id' => 'branch_id',
+                                'required',
+                                'placeholder' => 'Select Branch',
+                            ]) !!}
                         </div>
 
-                        <button type="submit" class="btn btn-primary">Update</button>
-                    </form>
+                        <div class="col-sm-12 col-md-4 mb-3">
+                            {!! Form::label('code', 'Branch Code') !!}
+                            {!! Form::text('code', null, ['class' => 'form-control', 'id' => 'code', 'readonly']) !!}
+                        </div>
 
+                        <div class="col-sm-12 headinginfo h4 py-3 my-4">1. Course Details</div>
+
+                        <div class="col-sm-12 col-md-4 mb-3">
+                            {!! Form::label('course_id', 'Course', ['class' => 'form-label']) !!}
+                            {!! Form::select('course_id', $course->pluck('code', 'id'), null, [
+                                'class' => 'form-select',
+                                'id' => 'course_id',
+                                'required',
+                                'placeholder' => 'Select Branch',
+                            ]) !!}
+                        </div>
+
+                        <div class="col-sm-12 col-md-4 mb-3">
+                            {!! Form::label('course_code', 'Course Code') !!}
+                            {!! Form::text('course_name', null, ['class' => 'form-control', 'readonly']) !!}
+                        </div>
+
+                        <div class="col-sm-12 col-md-4 mb-3">
+                            {!! Form::label('cduration', 'Course Duration') !!}
+                            {!! Form::text('cduration', null, ['class' => 'form-control', 'readonly']) !!}
+                        </div>
+
+                        <div class="col-sm-12 col-md-4 mb-3">
+                            {!! Form::label('total_fee', 'Course Fee') !!}
+                            {!! Form::text('total_fee', null, ['class' => 'form-control', 'readonly']) !!}
+                        </div>
+
+                        <div class="col-sm-12 col-md-4 mb-3">
+                            {!! Form::label('course_type', 'Course Type') !!}
+                            {!! Form::text('course_type', null, ['class' => 'form-control', 'readonly']) !!}
+                        </div>
+
+                        <div class="col-sm-12 col-md-4 mb-3">
+                            {!! Form::label('eligibility', 'Eligibility *') !!}
+                            {!! Form::text('eligibility', null, ['class' => 'form-control', 'readonly' => 'readonly']) !!}
+                        </div>
+
+                        <div class="col-sm-12 headinginfo h4 py-3 my-4">2. Basic Information</div>
+
+                        <div class="col-sm-12 col-md-4 mb-3">
+                            {!! Form::label('name', 'Student Name *') !!}
+                            {!! Form::text('name', null, [
+                                'class' => 'form-control',
+                                'placeholder' => 'Student Name',
+                                'required' => 'required',
+                            ]) !!}
+                        </div>
+
+                        <div class="col-sm-12 col-md-4 mb-3">
+                            {!! Form::label('father_name', 'Father"s Name *') !!}
+                            {!! Form::text('father_name', null, [
+                                'class' => 'form-control',
+                                'placeholder' => "Father's Name",
+                                'required' => 'required',
+                            ]) !!}
+                        </div>
+
+                        <div class="col-sm-12 col-md-4 mb-3">
+                            {!! Form::label('father_occupation', 'Father"s Occupation *') !!}
+                            {!! Form::text('father_occupation', null, ['class' => 'form-control', 'placeholder' => "Father's Occupation"]) !!}
+                        </div>
+
+                        <div class="col-sm-12 col-md-4 mb-3">
+                            {!! Form::label('student_dob', 'Date of Birth (dd/mm/YYYY) *') !!}
+                            {!! Form::text('student_dob', null, [
+                                'class' => 'form-control',
+                                'placeholder' => 'Please select Date Time',
+                                'id' => 'dob',
+                                'required' => 'required',
+                            ]) !!}
+                        </div>
+
+                        <div class="col-sm-12 col-md-4 mb-3">
+                            {!! Form::label('phone', 'Mobile Numbe *') !!}
+                            {!! Form::text('phone', null, [
+                                'class' => 'form-control valid',
+                                'maxlength' => '10',
+                                'placeholder' => 'Mobile Number',
+                                'required' => 'required',
+                                'oninput' => "this.value = this.value.replace(/[^0-9]/g, '');",
+                            ]) !!}
+                        </div>
+
+                        <div class="col-sm-12 col-md-4 mb-3">
+                            {!! Form::label('gender', 'Gender') !!}
+                            <div class="my-2">
+                                <label class="form-check form-check-inline">
+                                    {!! Form::radio('gender', 'male', true, ['class' => 'form-check-input']) !!} Male
+                                </label>
+                                <label class="form-check form-check-inline">
+                                    {!! Form::radio('gender', 'female', false, ['class' => 'form-check-input']) !!} Female
+                                </label>
+                                <label class="form-check form-check-inline">
+                                    {!! Form::radio('gender', 'other', false, ['class' => 'form-check-input']) !!} Other
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-4 mb-3 mb-3 mt-3">
+                            {!! Form::label('profile_image', 'Upload Photo *') !!}
+                            {!! Form::file('profile_image', [
+                                'class' => 'form-control',
+                                'id' => 'profile_image',
+                                'accept' => 'image/*',
+                                'required' => 'required',
+                            ]) !!}
+                        </div>
+
+                        <div class="col-sm-12 col-md-4 mb-3">
+                            <div class="row">
+                                <div class="col-sm-7" id="spreview">
+                                    <img src="" alt="Preview"
+                                        style="max-width: 150px; max-height: 150px; display: none;" id="imagePreview">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 headinginfo h4 py-3 my-4">3. Contact Information</div>
+
+                        <div class="col-sm-12 col-md-4 mb-3">
+                            {!! Form::label('address1', 'Address (Line1) *') !!}
+                            {!! Form::text('address1', null, [
+                                'class' => 'form-control',
+                                'placeholder' => 'Address (Line1)',
+                                'required' => 'required',
+                            ]) !!}
+                        </div>
+
+                        <div class="col-sm-12 col-md-4 mb-3">
+                            {!! Form::label('address2', 'Address (Line2) *') !!}
+                            {!! Form::text('address2', null, [
+                                'class' => 'form-control',
+                                'placeholder' => 'Address (Line2)',
+                            ]) !!}
+                        </div>
+
+                        <div class="col-sm-12 col-md-4 mb-3">
+                            {!! Form::label('state_id', 'State', ['class' => 'form-label']) !!}
+                            {!! Form::select('state_id', $states->pluck('name', 'id'), null, [
+                                'class' => 'form-select',
+                                'id' => 'state_id',
+                                'required',
+                                'placeholder' => 'Select Branch',
+                            ]) !!}
+                        </div>
+
+                        <div class="col-sm-12 col-md-4 mb-3">
+                            {!! Form::label('district_id', 'District', ['class' => 'form-label']) !!}
+                            {!! Form::select('district_id', [], null, [
+                                'class' => 'form-select',
+                                'id' => 'district_id',
+                                'required',
+                                'placeholder' => 'Select District',
+                            ]) !!}
+                        </div>
+
+                        <div class="col-sm-12 col-md-4 mb-3">
+                            {!! Form::label('email', 'Email *') !!}
+                            {!! Form::email('email', null, ['class' => 'form-control', 'placeholder' => 'Email']) !!}
+                        </div>
+
+                        <div class="col-sm-12 col-md-4 mb-3">
+                            {!! Form::label('wphone', 'Whatsapp Numbe *') !!}
+                            {!! Form::text('wphone', null, [
+                                'class' => 'form-control valid',
+                                'maxlength' => '10',
+                                'placeholder' => 'Whatsapp Number',
+                                'required' => 'required',
+                                'oninput' => "this.value = this.value.replace(/[^0-9]/g, '');",
+                            ]) !!}
+                        </div>
+
+                        <div class="col-sm-12 headinginfo h4 py-3 my-4">4. Educational Qualification</div>
+
+                        <div class="row mb-3">
+                            <div class="col-3">
+                                {!! Form::label('qualification', 'Education', ['class' => 'form-label']) !!}
+                                {!! Form::select('qualification', $level->pluck('name', 'id'), null, [
+                                    'class' => 'form-select',
+                                    'placeholder' => 'Select Education',
+                                ]) !!}
+                            </div>
+
+                            <div class="col-3">
+                                {!! Form::label('board_university', 'Board/University') !!}
+                                {!! Form::text('board_university', null, ['class' => 'form-control', 'placeholder' => 'Board/University']) !!}
+                            </div>
+                            <div class="col-3">
+                                {!! Form::label('year_of_passing', 'Year of Passing') !!}
+                                {!! Form::number('year_of_passing', null, [
+                                    'class' => 'form-control',
+                                    'placeholder' => 'Year of Passing',
+                                    'max' => now()->format('Y'),
+                                ]) !!}
+                            </div>
+                            <div class="col-3">
+                                {!! Form::label('percentage', 'Percentage (%)') !!}
+                                {!! Form::number('percentage', null, [
+                                    'class' => 'form-control',
+                                    'placeholder' => 'Percentage (%)',
+                                    'max' => '100',
+                                ]) !!}
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            {!! Form::label('pqualification', 'Professional Qualification') !!}
+                            {!! Form::text('pqualification', null, [
+                                'class' => 'form-control',
+                                'placeholder' => 'Professional Qualification',
+                            ]) !!}
+                        </div>
+
+                    </div>
+                    <div class="d-flex align-items-start gap-3 mt-4">
+                        {!! Form::submit('Submit', ['class' => 'btn btn-primary w-sm ms-auto', 'name' => 'addbtn']) !!}
+                    </div>
+                    {!! Form::close() !!}
                 </div>
             </div>
-        </div>
-    </div>
-
+        </div><!-- end col -->
+    </div><!-- end row -->
 @endsection
 
 @push('scripts')
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script src="{{ asset('assets/libs/flatpickr/flatpickr.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/choices.js/public/assets/scripts/choices.min.js') }}"></script>
+    <script src="{{ asset('assets/js/pages/form-validation.init.js') }}"></script>
     <script>
-        $(document).ready(function() {
-            var table = initializeDataTable('#table');
-
-            $('#updateForm').submit(function(e) {
-                e.preventDefault();
-                var stateId = $("#id").val();
-                const formData = new FormData(this);
-                $.ajax({
-                    url: 'states/' + stateId,
-                    method: 'POST',
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    success: function(response) {
-                        if (response.status) {
-                            $('#edit').modal('hide');
-                            $('#table').DataTable().ajax.reload();
-                        }
-                    },
-                    error: function(error) {
-                        console.error(error);
-                    }
-                });
-            });
-        });
-
-        $("#addForm").submit(function(e) {
-            e.preventDefault();
-            const data = new FormData(this);
-            $.ajax({
-                type: "POST",
-                url: "{{ route('states.store') }}",
-                data: data,
-                processData: false,
-                contentType: false,
-                success: function(data) {
-                    $('.modal').modal('hide');
-                    $('#addForm').trigger("reset");
-                    $('#table').DataTable().ajax.reload();
-                },
-                error: function(error) {
-                    console.error(error);
-                }
-            })
-        });
-
-        function initializeDataTable(tableId) {
-            return $(tableId).DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: '{{ route('states.datatables') }}',
-                columns: [{
-                        data: 'id',
-                    },
-                    {
-                        data: 'name',
-                    },
-                    {
-                        data: 'created_at',
-                    },
-                    {
-                        data: 'action',
-                        orderable: false,
-                        searchable: false
-                    }
-                ]
+        function SelectOption(response, select_dropdown, selectedCityName) {
+            select_dropdown.empty().append($("<option>").text("Select").val(""));
+            $.each(response, function(key, value) {
+                select_dropdown.append(
+                    $("<option>").text(value[selectedCityName]).val(value.id)
+                );
             });
         }
 
-        function getState(stateId) {
-            $.ajax({
-                url: 'states/' + stateId,
+        function makeAjaxRequest(url, successCallback) {
+            return $.ajax({
+                url: url,
                 type: 'GET',
-                success: function(response) {
-                    $('#edit').modal('show');
-                    $('#id').val(response.id);
-                    $('#stname').val(response.name);
-                },
+                success: successCallback,
                 error: function(xhr, status, error) {
                     console.error(xhr.responseText);
                 }
             });
         }
 
-        function deleteState(stateId) {
-            $.ajax({
-                url: 'states/' + stateId,
-                type: 'DELETE',
-                success: function(response) {
-                    if (response.status) {
-                        $('#row_' + stateId).closest('tr').remove();
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
+        const district_id = "{{ route('students.district', $data['district_id']) }}";
+        makeAjaxRequest(district_id, function(response) {
+            SelectOption(response, $('[name="district_id"]'), "name");
+        });
+
+        $("#state_id").change(function() {
+            var stateId = $(this).val();
+            const url = "{{ route('students.district', ':stateId') }}".replace(':stateId', stateId);
+            makeAjaxRequest(url, function(response) {
+                SelectOption(response, $('[name="district_id"]'), "name");
             });
-        }
+        });
+
+        const branch_id = "{{ route('students.branch-code', $data['branch_id']) }}";
+        makeAjaxRequest(branch_id, function(response) {
+            $('#code').val(response.code);
+        });
+
+
+        $('#branch_id').change(function() {
+            const cityId = $(this).val();
+            const url = "{{ route('students.branch-code', ':cityId') }}".replace(':cityId', cityId);
+            makeAjaxRequest(url, function(response) {
+                $('#code').val(response.code);
+            });
+        });
+
+        $('#course_id').change(function() {
+            var courseId = $(this).val();
+            const url = "{{ route('students.course-code', ':courseId') }}".replace(':courseId', courseId);
+            makeAjaxRequest(url, function(response) {
+                $('[name="course_name"]').val(response.name);
+                $('[name="cduration"]').val(`${response.course_duration} ${response.duration_time}`);
+                $('[name="total_fee"]').val(response.total_fee);
+                $('[name="course_type"]').val(response.course_type);
+                $('[name="eligibility"]').val(response.eligibility);
+            });
+        });
+
+        $("#datepicker").flatpickr({
+            maxDate: 'today',
+            defaultDate: 'today',
+        });
+
+        $("#dob").flatpickr({
+            dateFormat: "Y-m-d",
+            maxDate: 'today',
+            defaultDate: '2002-06-28',
+        });
+
+        $("#profile_image").on("change", function() {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = (e) =>
+                    $("#imagePreview").attr("src", e.target.result).show();
+                reader.readAsDataURL(this.files[0]);
+            }
+        });
+
+        new Choices("#branch_id");
+        new Choices("#course_id");
+        new Choices("#state_id");
+        new Choices("#qualification");
     </script>
 @endpush

@@ -1,9 +1,11 @@
 @extends('backend.admin.layouts.app')
 @section('title', 'Login - Admin')
-@section('nav', 'index')
+@section('nav', 'Students')
 @push('links')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <!-- alertifyjs Css -->
+    <link href="../assets/libs/alertifyjs/build/css/alertify.min.css" rel="stylesheet" type="text/css" />
 @endpush
 @push('styles')
     <style>
@@ -33,10 +35,10 @@
         <div class="col-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="card-title" style="text-align: center;">Add State</h4>
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add">
-                        Add State
-                    </button>
+                    <h4 class="card-title" style="text-align: center;">Add Student</h4>
+                    <a href="{{ route('students.create') }}" class="btn btn-primary">
+                        Add Student
+                    </a>
                 </div>
                 <div class="card-body">
                     <table id="table" class="table table-hover table-striped">
@@ -91,6 +93,9 @@
                 ],
                 ajax: '{{ route('students.datatables') }}',
                 columns: getColumns(),
+                search: {
+                    "regex": true
+                },
                 drawCallback: setupDrawCallback,
             });
         }
@@ -100,7 +105,7 @@
                     data: "id"
                 },
                 {
-                    data: 'enrollment',
+                    render: renderEnrollmentColumn
                 },
                 {
                     data: "name"
@@ -120,9 +125,6 @@
                 {
                     render: renderApprovalColumn
                 },
-                // {
-                //     render: renderButtonGroupColumn
-                // },
                 {
                     data: 'action',
                 },
@@ -133,28 +135,15 @@
             return baseColumns;
         }
 
-        function renderButtonGroupColumn(data, type, row) {
-            return '<div class="btn-group btn-group-sm">' +
-                '<a class="btn btn-success" href="edit-student.php?id=' + row.id + '">' +
-                '<i class="font-size-10 fas fa-user-edit"></i>' +
-                '</a>' +
-                '<button class="btn btn-danger delete" data-id="' + row.id + '">' +
-                '<i class="font-size-10 far fa-trash-alt"></i>' +
-                '</button>' +
-                '<a class="btn btn-info" href="details-student.php?id=' + row.id + '">' +
-                '<i class="font-size-10 fas fa-eye"></i>' +
-                '</a>' +
-                '<button class="btn btn-primary cartificate" onclick="edit(\'' + row.enrollment + '\')">' +
-                '<i class="font-size-10 fas fa-certificate"></i>' +
-                '</button>' +
-                '</div>';
-        }
-
         function renderApprovalColumn(data, type, row) {
             return '<button class="text-uppercase badge fs-6 border-0 bg-' + (row.approve === "yes" ? "success" :
                     "danger") + ' approve" data-id="' + row.id + '" ' + (row.approve === "yes" ? "disabled" : "") + '>' +
                 '<i class="bx bx-' + (row.approve === "yes" ? "badge-check" : "x") + '"></i>' +
                 '</button>';
+        }
+
+        function renderEnrollmentColumn(data, type, row) {
+            return '<div id=row' + row.id + '>' + row.enrollment + '</div>';
         }
 
         function renderStudentStatusColumn(data, type, row) {
@@ -178,14 +167,14 @@
             return selectElement.prop('outerHTML');
         }
 
-        function getState(stateId) {
+        function deleteState(stateId) {
             $.ajax({
-                url: 'states/' + stateId,
-                type: 'GET',
+                url: 'students/' + stateId,
+                type: 'DELETE',
                 success: function(response) {
-                    $('#edit').modal('show');
-                    $('#id').val(response.id);
-                    $('#stname').val(response.name);
+                    if (response.status) {
+                        $('#row_' + stateId).closest('tr').remove();
+                    }
                 },
                 error: function(xhr, status, error) {
                     console.error(xhr.responseText);
@@ -193,15 +182,11 @@
             });
         }
 
-        function deleteState(stateId) {
-            $.ajax({
-                url: 'states/' + stateId,
-                type: 'DELETE',
-                success: function(response) {
-                    if (response.status) {
-                        $('#row_' + stateId).closest('tr').remove();
-                    }
-                },
+        function makeAjaxRequest(url, successCallback) {
+            return $.ajax({
+                url: url,
+                type: 'GET',
+                success: successCallback,
                 error: function(xhr, status, error) {
                     console.error(xhr.responseText);
                 }
@@ -241,10 +226,10 @@
                     $(this).children().prop("disabled", false);
                     $(this).find(":selected").prop("disabled", true);
                 }
+
                 const data = {
                     id: id,
                     status: value,
-                    action: "updateStudentStatus",
                 };
 
                 const success = function(response) {
@@ -260,8 +245,56 @@
                         alertify.notify(response.message, currentClasses, 3);
                     }
                 };
-                const url = "../php/controller/studentController.php";
+
+                const url = "{{ route('students.student-status', ':id') }}".replace(':id', id);
                 performAjaxRequest(url, data, success);
+            });
+        }
+
+        function performAjaxRequest(url, data, success) {
+            $.ajax({
+                url: url,
+                method: "POST",
+                data: data,
+                dataType: "json",
+                success: success,
+                error: function(xhr, status, error) {
+                    console.error("Error occurred during the operation:", xhr.responseText);
+                },
+            });
+        }
+
+        function processApproval($element) {
+            const itemId = $element.data("id");
+            Swal.fire({
+                title: "Processing: Please Approve Student",
+                html: '<button class="btn btn-sm btn-success">This process is in progress.</button>',
+                didOpen: function() {
+                    Swal.showLoading();
+                    timerInterval = setInterval(function() {
+                        var content = Swal.getHtmlContainer();
+                        if (content) {
+                            var b = content.querySelector("b");
+                            if (b) {
+                                b.textContent = Swal.getTimerLeft();
+                            }
+                        }
+                    }, 100);
+                },
+            });
+
+            const url = "{{ route('students.approve', ':itemId') }}".replace(':itemId', itemId);
+            makeAjaxRequest(url, function(response) {
+                console.log(response);
+                Swal.close();
+                if (response.status === true) {
+                    $("#row" + itemId).text(response.enrollment);
+                    const $icon = $element.find("i");
+                    $element.removeClass("bg-danger").addClass("bg-success");
+                    $icon.removeClass("bx-x").addClass("bx-badge-check");
+                } else {
+                    alert(response.message);
+                }
             });
         }
 

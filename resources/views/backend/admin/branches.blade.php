@@ -1,6 +1,6 @@
 @extends('backend.admin.layouts.app')
 @section('title', 'Login - Admin')
-@section('nav', 'Courses')
+@section('nav', 'Branches')
 @push('links')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <!-- choices css -->
@@ -13,9 +13,9 @@
         <div class="col-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="card-title" style="text-align: center;">Add branches</h4>
+                    <h4 class="card-title" style="text-align: center;">Add Branch</h4>
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add">
-                        Add branches
+                        Add Branch
                     </button>
                 </div>
                 <div class="card-body">

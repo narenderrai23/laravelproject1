@@ -49,8 +49,8 @@
                         <span class="menu-item" data-key="t-student">Student</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="students/create" data-key="students/create">Add Student</a></li>
-                        <li><a href="students" data-key="edit-students">Manage Student</a></li>
+                        <li><a href="{{ route('students.create') }}" data-key="students.create">Add Student</a></li>
+                        <li><a href="{{ route('students.index') }}" data-key="students.index">Manage Student</a></li>
                         <li><a href="filter-students" data-key="students-excel">Excel Student</a></li>
                         <li><a href="students" data-key="students-excel">Filter Student</a></li>
                         <li><a href="students-completed" data-key="students-excel">Completed Student</a></li>
@@ -63,7 +63,7 @@
                         <span class="menu-item" data-key="t-branch">Branch</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="branches" data-key="branches">Branch</a></li>
+                        <li><a href="{{ route('branches.index') }}" data-key="branches">Branch</a></li>
                         <li><a href="filter-branch" data-key="branch-excel">Branch Excel</a></li>
                     </ul>
                 </li>
@@ -74,9 +74,9 @@
                         <span class="menu-item" data-key="t-branch">City</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="cities" data-key="cities">Cities</a></li>
-                        <li><a href="states" data-key="states">States</a></li>
-                        <li><a href="districts" data-key="districts">District</a></li>
+                        <li><a href="{{ route('cities.index') }}" data-key="cities">Cities</a></li>
+                        <li><a href="{{ route('states.index') }}" data-key="states">States</a></li>
+                        <li><a href="{{ route('districts.index') }}" data-key="districts">District</a></li>
                     </ul>
                 </li>
 
@@ -86,8 +86,8 @@
                         <span class="menu-item" data-key="t-course">Course</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="courses" data-key="courses">Course</a></li>
-                        <li><a href="categories" data-key="categories">Category</a></li>
+                        <li><a href="{{ route('courses.index') }}" data-key="courses">Course</a></li>
+                        <li><a href="{{ route('categories.index') }}" data-key="categories">Category</a></li>
                     </ul>
                 </li>
 
@@ -97,7 +97,7 @@
                         <span class="menu-item" data-key="t-course">Settings</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="profile" data-key="courses">Contacts Profile</a></li>
+                        <li><a href="{{ route('profile.edit') }}" data-key="courses">Contacts Profile</a></li>
                         <li><a href="importer" data-key="importer">Importer</a></li>
                     </ul>
                 </li>

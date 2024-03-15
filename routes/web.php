@@ -9,6 +9,7 @@ use App\Http\Controllers\BranchController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\DistrictController;
+use App\Http\Controllers\MailController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,6 +31,7 @@ Route::view('/dashboard', 'dashboard')->name('dashboard')->middleware('admin');
 
 Route::group(['middleware' => 'admin', 'prefix' => 'admin'], function () {
     Route::view('/', 'backend.admin.dashboard')->name('admin.dashboard');
+    Route::view('/dashboard', 'backend.admin.dashboard')->name('admin.dashboard');
     Route::view('/profile', 'backend.admin.profile')->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -68,11 +70,13 @@ Route::group(['middleware' => 'admin', 'prefix' => 'admin'], function () {
     Route::resource('students', StudentController::class);
     Route::get('student/datatables', [StudentController::class, 'datatables'])->name('students.datatables');
     Route::get('students/branch-code/{city_id}', [StudentController::class, 'branchCode'])->name('students.branch-code');
+    Route::get('students/approve/{city_id}', [StudentController::class, 'approve'])->name('students.approve');
+    Route::post('students/student-status/{id}', [StudentController::class, 'StudentStatus'])->name('students.student-status');
     Route::get('students/course-code/{city_id}', [CourseController::class, 'show'])->name('students.course-code');
-    Route::get('students/fetch-city/{city_id}', [StudentController::class, 'fetchCity'])->name('students.city');
     Route::get('students/district/{city_id}', [DistrictController::class, 'fetchDistrict'])->name('students.district');
 
 });
+
 
 // Route::middleware('auth')->group(function () {
 //     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -11,9 +11,9 @@
         <div class="col-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="card-title" style="text-align: center;">Add courses</h4>
+                    <h4 class="card-title" style="text-align: center;">Add Course</h4>
                     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add">
-                        Add courses
+                        Add Course
                     </button>
                 </div>
                 <div class="card-body">

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 14, 2024 at 01:37 PM
+-- Generation Time: Mar 15, 2024 at 01:34 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -57,7 +57,8 @@ INSERT INTO `branches` (`id`, `city_id`, `code`, `name`, `head`, `category`, `ph
 (3, 4, 'RON20240312003', 'Josephine Garrett1', 'Courtney May1', 'training', '4145097161', '2024-03-21', '2027-03-21', 'Consectetur porro co1', 'Sint vel aliquam qua1', 'vefumu@gmail.com1', '$2y$12$8mcF1n/mHBNcQ.zkCIeFjuxwyVOvKwJPmBh3ZsDXrgVAURPknGHLS', NULL, '2024-03-12 05:41:45', '2024-03-12 00:11:45', '2024-03-12 01:31:45'),
 (4, 4, 'RON20240312004', 'asdasd', 'asda', 'training', '2321312312', '2024-03-12', '2027-03-12', '123123', '123123', 'jupame@mailinator.com', '$2y$12$T/QOps9y/atCP2Du6Ws./eRJCgCXS0IvHnq55B5m0N/ZpmNWDGTbG', NULL, '2024-03-12 06:50:02', '2024-03-12 01:20:02', '2024-03-12 01:20:02'),
 (5, 1, 'BHA20240312005', 'Jasmine Rogers', 'Xyla Rich', 'authorized', '1611313684', '2024-03-12', '2027-03-12', 'Nostrum ullamco sint', 'Aut minim voluptatum', 'diwexesup@gmail.com', '$2y$12$0shc1Dpl7K4nLQYK3NR.B.d6t6NZRBUpTBDoN0OVYSszywXkqbDJu', NULL, '2024-03-12 07:05:40', '2024-03-12 01:35:40', '2024-03-12 01:35:40'),
-(6, 2, 'KOP20240312006', 'Silas Delgado', 'Nyssa Jacobson', 'authorized', '7329543675', '2024-03-15', '2027-03-15', 'Assumenda cupidatat', 'Et voluptate aut ex', 'cohyqa@gmail.com', 'Pa$$w0rd!', NULL, '2024-03-12 07:06:09', '2024-03-12 01:36:09', '2024-03-12 01:36:09');
+(6, 2, 'KOP20240312006', 'Silas Delgado', 'Nyssa Jacobson', 'authorized', '7329543675', '2024-03-15', '2027-03-15', 'Assumenda cupidatat', 'Et voluptate aut ex', 'cohyqa@gmail.com', 'Pa$$w0rd!', NULL, '2024-03-12 07:06:09', '2024-03-12 01:36:09', '2024-03-12 01:36:09'),
+(7, 1, 'BHA20240315007', 'Kessie Odonnell', 'Reagan Gallagher', 'learning', '6353228365', '2024-03-15', '2027-03-15', 'Quis laudantium inv', 'Quidem quo enim ut e', 'fucu@gmail.com', '$2y$12$OBNMhYRYDGO4iDJ4pibTqu4IwBWa2kn5/TbyjXzhztdbw.His4oxG', NULL, '2024-03-15 06:23:49', '2024-03-15 00:53:49', '2024-03-15 00:53:49');
 
 -- --------------------------------------------------------
 
@@ -107,7 +108,8 @@ INSERT INTO `cities` (`id`, `name`, `code`, `state_id`, `created_at`, `updated_a
 (1, 'Bahadrabad', 'BHA', 4, '2024-03-11 01:15:11', '2024-03-11 05:24:52'),
 (2, 'Kopa', 'KOP', 4, '2024-03-11 01:15:56', '2024-03-11 01:15:56'),
 (3, 'New Arya Nagar', 'NEA', 34, '2024-03-11 01:16:14', '2024-03-11 01:16:14'),
-(4, 'Rongpur', 'RON', 3, '2024-03-11 01:16:28', '2024-03-11 01:16:28');
+(4, 'Rongpur', 'RON', 3, '2024-03-11 01:16:28', '2024-03-11 01:16:28'),
+(5, 'Jason Eaton', 'SED', 10, '2024-03-15 00:54:07', '2024-03-15 00:54:07');
 
 -- --------------------------------------------------------
 
@@ -392,7 +394,7 @@ CREATE TABLE `districts` (
 --
 
 INSERT INTO `districts` (`id`, `name`, `state_id`, `created_at`, `updated_at`) VALUES
-(1, 'Anantapur', 1, NULL, '2024-03-12 03:01:52'),
+(1, 'Anantapur', 1, NULL, '2024-03-15 00:54:43'),
 (2, 'Chittoor', 1, NULL, NULL),
 (3, 'East Godavari', 1, NULL, NULL),
 (4, 'Guntur', 1, NULL, NULL),
@@ -1247,7 +1249,8 @@ INSERT INTO `qualifications` (`id`, `student_id`, `qualification`, `board_univer
 (7, 8, '5', 'Libero autem exercit', '2014', '28', '2024-03-14 05:24:26', '2024-03-14 05:24:26'),
 (8, 10, '4', 'Officia consectetur', '1973', '83', '2024-03-14 06:33:33', '2024-03-14 06:33:33'),
 (9, 11, '4', 'Officiis odio sed re', '1977', '80', '2024-03-14 06:34:53', '2024-03-14 06:34:53'),
-(10, 12, '4', 'Perspiciatis et dol', '1973', '92', '2024-03-14 06:35:29', '2024-03-14 06:35:29');
+(10, 12, '4', 'Perspiciatis et dol', '1973', '92', '2024-03-14 06:35:29', '2024-03-14 06:35:29'),
+(11, 13, NULL, 'Proident ut aut a a', '2010', '96', '2024-03-15 00:32:34', '2024-03-15 00:32:34');
 
 -- --------------------------------------------------------
 
@@ -1267,8 +1270,8 @@ CREATE TABLE `states` (
 --
 
 INSERT INTO `states` (`id`, `name`, `created_at`, `updated_at`) VALUES
-(1, 'Andhra Pradesh', '2024-03-09 02:27:04', '2024-03-11 01:02:56'),
-(2, 'Arunachal Pradesh', '2024-03-09 05:26:14', '2024-03-09 02:47:11'),
+(1, 'Andhra Pradesh', '2024-03-09 02:27:04', '2024-03-15 00:54:23'),
+(2, 'Arunachal Pradesh', '2024-03-09 05:26:14', '2024-03-15 00:54:30'),
 (3, 'Assam', '2024-03-09 05:26:14', '2024-03-09 02:41:39'),
 (4, 'Bihar', '2024-03-09 05:26:14', NULL),
 (5, 'Chandigarh (UT)', '2024-03-09 05:26:14', NULL),
@@ -1342,13 +1345,13 @@ CREATE TABLE `students` (
 --
 
 INSERT INTO `students` (`id`, `date_admission`, `branch_id`, `enrollment`, `course_id`, `till_date`, `name`, `father_name`, `father_occupation`, `student_dob`, `gender`, `profile_image`, `address1`, `address2`, `district_id`, `phone`, `wphone`, `email`, `pqualification`, `qualification`, `student_status`, `created_by`, `approve`, `created_at`, `updated_at`) VALUES
-(1, '2024-03-14', 3, NULL, 108, NULL, 'Kyla Preston', 'August Stokes', 'Ex quasi obcaecati e', '2002-06-28', 'female', 'download.png', 'New Delhi', 'Facilis lorem volupt', 40, '9488035261', '9642692547', 'kasij@gmail.com', 'Totam ex et nihil ar', 4, 'running', 'jupame@mailinator.com', 'no', '2024-03-14 05:02:02', '2024-03-14 05:02:02'),
-(3, '2024-03-14', 3, NULL, 109, NULL, 'Bell Duran', 'Hedda Kidd', 'Voluptatem totam tem', '2002-06-28', 'female', 'download.png', 'New Delhi', 'Ea dignissimos aut l', 74, '5054378269', '5689654384', 'cogufuburo@gmail.com', 'Ex eos earum numquam', 3, 'complete', 'jupame@mailinator.com', 'no', '2024-03-14 05:03:42', '2024-03-14 05:03:42'),
-(5, '2024-03-08', 2, NULL, 219, NULL, 'Urielle Sweeney', 'Mara Glover', 'Nesciunt aut cumque', '2002-06-28', 'female', 'admin_image_65d737faa4f08.jfif', 'New Delhi', 'Harum qui qui est q', 38, '6519856803', '5332464297', 'xeparel@gmail.com', 'Dolor sed eum qui mo', 4, 'dropout', 'jupame@mailinator.com', 'no', '2024-03-14 05:17:53', '2024-03-14 05:17:53'),
-(8, '2024-03-14', 5, 'New-BHA0006', 219, NULL, 'Naida Best', 'Priscilla Elliott', 'Vel consequuntur tem', '2002-06-28', 'female', 'admin_image_65d737faa4f08.jfif', 'New Delhi', 'Eum molestiae amet', 106, '3336068267', '8096546107', 'kefyh@gmail.com', 'Corrupti doloribus', 5, 'running', 'jupame@mailinator.com', 'no', '2024-03-14 05:24:26', '2024-03-14 05:24:26'),
-(10, '2024-03-14', 5, 'New-BHA0009', 111, '2024-05-14', 'Ina Ayala', 'McKenzie Salinas', 'Omnis non at vero do', '2002-06-28', 'female', 'download.png', 'New Delhi', 'Ut tempor ex similiq', 106, '3576875059', '5752626415', 'tuxyreruhe@gmail.com', 'Nisi voluptatem cons', 4, 'running', 'jupame@mailinator.com', 'no', '2024-03-14 06:33:33', '2024-03-14 06:33:33'),
-(11, '2024-03-14', 5, 'New-BHA0010', 208, '2025-03-14', 'Mohammad Carver', 'Deirdre Bell', 'Sunt quas consectetu', '2002-06-28', 'female', 'download.png', 'New Delhi', 'Modi in aut sequi de', 81, '1683865095', '9085569237', 'koqorivip@gmail.com', 'Ab id ratione accusa', 4, 'running', 'jupame@mailinator.com', 'no', '2024-03-14 06:34:53', '2024-03-14 06:34:53'),
-(12, '2024-03-14', 5, 'New-BHA0012', 108, '2024-05-14', 'Edward Little', 'Isabelle Cotton', 'Labore dolor ad exce', '2002-06-28', 'female', 'download.png', 'New Delhi', 'Ea minus vero necess', 48, '2448716128', '3082294582', 'novarevyx@gmail.com', 'Ipsum enim magna ac', 4, 'running', 'jupame@mailinator.com', 'no', '2024-03-14 06:35:29', '2024-03-14 06:35:29');
+(1, '2024-03-14', 3, 'RON202403150001', 108, NULL, 'Kyla Preston', 'August Stokes', 'Ex quasi obcaecati e', '2002-06-28', 'female', 'download.png', 'New Delhi', 'Facilis lorem volupt', 40, '9488035261', '9642692547', 'kasij@gmail.com', 'Totam ex et nihil ar', 4, 'running', 'jupame@mailinator.com', 'yes', '2024-03-14 05:02:02', '2024-03-15 04:56:59'),
+(3, '2024-03-14', 5, 'BHA202403150003', 109, NULL, 'Bell Duran', 'Hedda Kidd', 'Voluptatem totam tem', '2002-06-28', 'female', 'download.png', 'New Delhi', 'Ea dignissimos aut l', 74, '5054378269', '5689654384', 'cogufuburo@gmail.com', 'Ex eos earum numquam', 3, 'complete', 'jupame@mailinator.com', 'yes', '2024-03-14 05:03:42', '2024-03-15 04:54:38'),
+(5, '2024-03-08', 2, 'RON202403150005', 219, NULL, 'Urielle Sweeney', 'Mara Glover', 'Nesciunt aut cumque', '2002-06-28', 'female', 'admin_image_65d737faa4f08.jfif', 'New Delhi', 'Harum qui qui est q', 38, '6519856803', '5332464297', 'xeparel@gmail.com', 'Dolor sed eum qui mo', 4, 'dropout', 'jupame@mailinator.com', 'yes', '2024-03-14 05:17:53', '2024-03-15 04:53:21'),
+(8, '2024-03-14', 5, 'BHA202403150008', 219, NULL, 'Naida Best', 'Priscilla Elliott', 'Vel consequuntur tem', '2002-06-28', 'female', 'admin_image_65d737faa4f08.jfif', 'New Delhi', 'Eum molestiae amet', 106, '3336068267', '8096546107', 'kefyh@gmail.com', 'Corrupti doloribus', 5, 'running', 'jupame@mailinator.com', 'yes', '2024-03-14 05:24:26', '2024-03-15 04:52:07'),
+(10, '2024-03-14', 5, 'BHA202403150010', 111, '2024-05-14', 'Ina Ayala', 'McKenzie Salinas', 'Omnis non at vero do', '2002-06-28', 'female', 'download.png', 'New Delhi', 'Ut tempor ex similiq', 106, '3576875059', '5752626415', 'tuxyreruhe@gmail.com', 'Nisi voluptatem cons', 4, 'dropout', 'jupame@mailinator.com', 'yes', '2024-03-14 06:33:33', '2024-03-15 05:39:42'),
+(11, '2024-03-14', 5, 'BHA202403150011', 208, '2025-03-14', 'Mohammad Carver', 'Deirdre Bell', 'Sunt quas consectetu', '2002-06-28', 'female', 'download.png', 'New Delhi', 'Modi in aut sequi de', 81, '1683865095', '9085569237', 'koqorivip@gmail.com', 'Ab id ratione accusa', 4, 'dropout', 'jupame@mailinator.com', 'yes', '2024-03-14 06:34:53', '2024-03-15 05:39:36'),
+(12, '2024-03-14', 5, 'BHA202403150012', 108, '2024-05-14', 'Edward Little', 'Isabelle Cotton', 'Labore dolor ad exce', '2002-06-28', 'female', 'download.png', 'New Delhi', 'Ea minus vero necess', 48, '2448716128', '3082294582', 'novarevyx@gmail.com', 'Ipsum enim magna ac', 4, 'dropout', 'jupame@mailinator.com', 'yes', '2024-03-14 06:35:29', '2024-03-15 05:33:59');
 
 -- --------------------------------------------------------
 
@@ -1485,7 +1488,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `branches`
 --
 ALTER TABLE `branches`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -1497,7 +1500,7 @@ ALTER TABLE `categories`
 -- AUTO_INCREMENT for table `cities`
 --
 ALTER TABLE `cities`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `courses`
@@ -1539,7 +1542,7 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `qualifications`
 --
 ALTER TABLE `qualifications`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `states`
@@ -1551,7 +1554,7 @@ ALTER TABLE `states`
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `users`

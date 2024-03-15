@@ -13,7 +13,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
-// use Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\Demomail;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -49,7 +50,7 @@ class StudentController extends Controller
         return DataTables::of($students)
             ->addColumn('action', function ($state) {
                 return '<div class="btn-group btn-group-sm">
-                <a class="btn btn-success" href="students?id=' . $state->id . '">
+                <a class="btn btn-success" href="students/' . $state->id . '/edit">
                   <i class="font-size-10 fas fa-user-edit"></i>
                 </a>
                 <button  class="btn btn-danger" onclick="deleteState(' . $state->id . ')" id="row_' . $state->id . '">
@@ -71,10 +72,80 @@ class StudentController extends Controller
 
     public function branchCode($id)
     {
-        $branch = Branch::select('code')
-            ->where('id', $id)
-            ->first();
+        $branch = Branch::select('code')->find($id);
         return response()->json($branch);
+    }
+
+    public function approve($id)
+    {
+        $post = Student::find($id);
+
+        // Check if the student post exists
+        if (!$post) {
+            return response()->json(['status' => false, 'message' => 'Student not found']);
+        }
+
+        // Check if already approved
+        if ($post->approve === 'yes') {
+            return response()->json(['status' => false, 'message' => 'Already approved']);
+        }
+
+        $branch = Branch::find($post->branch_id);
+        if (!isset ($branch->city_id)) {
+            return ['status' => false, 'message' => 'Select Correct Branch.'];
+        }
+
+        $cities = City::select('code, name')->where('id', $branch->city_id)->first();
+        if (!isset ($cities->code)) {
+            return ['status' => false, 'message' => 'Select Correct City'];
+        }
+
+        $enrollment = $this->generateEnrollmentNumber($cities->code, $post->date_admission, $id);
+
+        $table = 'students';
+        $status = 'yes';
+        try {
+            $mail = Student::where('id', $id)
+                ->update([
+                    'approve' => $status,
+                    'enrollment' => $enrollment,
+                ]);
+
+            if ($mail) {
+                $mailData = [
+                    'title' => 'Your Admission is Confirmed!',
+                    'post' => $post,
+                    'branch' => $branch,
+                    'cities' => $cities,
+                ];
+                Mail::to('narenderrai23@gmail.com')->send(new Demomail($mailData));
+            }
+            return response()->json(['status' => true, 'message' => 'Status updated!', 'enrollment' => $enrollment]);
+        } catch (\Exception $e) {
+            return ['status' => false, 'message' => 'Database error: ' . $e->getMessage()];
+        }
+    }
+
+    public function StudentStatus(Request $request, Student $student)
+    {
+        try {
+            Student::where('id', $request->id)
+                ->update([
+                    'student_status' => $request->status,
+                ]);
+            return response()->json(['status' => true, 'message' => 'State updated successfully']);
+        } catch (\Exception $e) {
+            return ['status' => false, 'message' => 'Database error: ' . $e->getMessage()];
+        }
+    }
+
+
+    function generateEnrollmentNumber($code, $date_admission, $id)
+    {
+        $date_admission = $date_admission = date("Ymd");
+        $id = str_pad($id, 4, '0', STR_PAD_LEFT);
+        $enrollment = $code . str_replace('-', '', $date_admission) . str_pad($id, 4, '0', STR_PAD_LEFT);
+        return $enrollment;
     }
 
 
@@ -115,7 +186,7 @@ class StudentController extends Controller
 
         // Check if validation fails
         if ($validator->fails()) {
-            return ['status' => false, 'message' => $validator->errors()->first()];
+            return ['status' => false, 'message' => $validator->errors()->first(), 'request' => $request->all()];
         }
 
 
@@ -124,7 +195,7 @@ class StudentController extends Controller
 
 
         $branch = Branch::where('id', $request->branch_id)->first();
-        if (!$branch || !isset($branch->city_id)) {
+        if (!$branch || !isset ($branch->city_id)) {
             return ['status' => false, 'message' => "Please fill in all required fields. The field 'Branch' is required."];
         }
 
@@ -200,9 +271,14 @@ class StudentController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Student $student)
+    public function edit($id)
     {
-        //
+        $data = Student::find($id);
+        $states = State::select('id', 'name')->get();
+        $branches = Branch::select('id', 'name')->get();
+        $course = Course::select('id', 'code')->get();
+        $level = Education::select('id', 'name')->get();
+        return view('backend.admin.students.edit', compact('data', 'states', 'level', 'branches', 'course'));
     }
 
     /**
@@ -217,9 +293,15 @@ class StudentController extends Controller
      * Remove the specified resource from storage.
      */
 
-    public function destroy(Student $state)
+    // public function destroy(Student $student)
+    // {
+    //     $student->delete();
+    //     return response()->json(['status' => true, 'message' => 'Student deleted successfully']);
+    // }
+
+    public function destroy($id)
     {
-        $state->delete();
-        return response()->json(['status' => true, 'message' => 'State deleted successfully']);
+        Student::where('id', $id)->delete();
+        return response()->json(['status' => true, 'message' => 'Student deleted successfully']);
     }
 }
