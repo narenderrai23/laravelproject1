@@ -91,16 +91,16 @@ class StudentController extends Controller
         }
 
         $branch = Branch::find($post->branch_id);
-        if (!isset ($branch->city_id)) {
+        if (!isset($branch->city_id)) {
             return ['status' => false, 'message' => 'Select Correct Branch.'];
         }
 
         $cities = City::select('code, name')->where('id', $branch->city_id)->first();
-        if (!isset ($cities->code)) {
+        if (!isset($cities->code)) {
             return ['status' => false, 'message' => 'Select Correct City'];
         }
 
-        $enrollment = $this->generateEnrollmentNumber($cities->code, $post->date_admission, $id);
+        $enrollment = $this->generateEnrollment($cities->code, $post->date_admission, $id);
 
         $table = 'students';
         $status = 'yes';
@@ -140,7 +140,7 @@ class StudentController extends Controller
     }
 
 
-    function generateEnrollmentNumber($code, $date_admission, $id)
+    public function generateEnrollment($code, $date_admission, $id)
     {
         $date_admission = $date_admission = date("Ymd");
         $id = str_pad($id, 4, '0', STR_PAD_LEFT);
@@ -195,7 +195,7 @@ class StudentController extends Controller
 
 
         $branch = Branch::where('id', $request->branch_id)->first();
-        if (!$branch || !isset ($branch->city_id)) {
+        if (!$branch || !isset($branch->city_id)) {
             return ['status' => false, 'message' => "Please fill in all required fields. The field 'Branch' is required."];
         }
 
@@ -273,7 +273,12 @@ class StudentController extends Controller
      */
     public function edit($id)
     {
-        $data = Student::find($id);
+        // $data = Student::with('district')->find($id);
+        $data = Student::select('students.*', 'districts.state_id', 'qualifications.*')
+            ->join('districts', 'students.district_id', '=', 'districts.id')
+            ->join('qualifications', 'students.id', '=', 'qualifications.student_id')
+            ->where('students.id', $id)
+            ->first();
         $states = State::select('id', 'name')->get();
         $branches = Branch::select('id', 'name')->get();
         $course = Course::select('id', 'code')->get();
@@ -292,13 +297,6 @@ class StudentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-
-    // public function destroy(Student $student)
-    // {
-    //     $student->delete();
-    //     return response()->json(['status' => true, 'message' => 'Student deleted successfully']);
-    // }
-
     public function destroy($id)
     {
         Student::where('id', $id)->delete();

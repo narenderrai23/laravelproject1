@@ -51,4 +51,8 @@ class Student extends Model
         return $this->belongsTo(District::class);
     }
 
+    public function qualification()
+    {
+        return $this->belongsTo(Qualification::class);
+    }
 }

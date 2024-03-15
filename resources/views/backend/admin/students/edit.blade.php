@@ -14,7 +14,7 @@
                 <div class="card-body">
                     {{ $data }}
                     {!! Form::open([
-                        'route' => 'students.store',
+                        'route' => 'students.update',
                         'method' => 'POST',
                         'id' => 'addForm',
                         'class' => 'needs-validation',
@@ -25,7 +25,7 @@
 
                         <div class="col-sm-12 col-md-4 mb-3">
                             {!! Form::label('date_admission', 'Date Of Admission', ['class' => 'form-label']) !!}
-                            {!! Form::text('date_admission', null, [
+                            {!! Form::text('date_admission', $data['date_admission'], [
                                 'class' => 'form-control',
                                 'id' => 'datepicker',
                                 'placeholder' => 'Please select Date Time',
@@ -52,7 +52,7 @@
 
                         <div class="col-sm-12 col-md-4 mb-3">
                             {!! Form::label('course_id', 'Course', ['class' => 'form-label']) !!}
-                            {!! Form::select('course_id', $course->pluck('code', 'id'), null, [
+                            {!! Form::select('course_id', $course->pluck('code', 'id'), $data['course_id'], [
                                 'class' => 'form-select',
                                 'id' => 'course_id',
                                 'required',
@@ -89,7 +89,7 @@
 
                         <div class="col-sm-12 col-md-4 mb-3">
                             {!! Form::label('name', 'Student Name *') !!}
-                            {!! Form::text('name', null, [
+                            {!! Form::text('name', $data['name'], [
                                 'class' => 'form-control',
                                 'placeholder' => 'Student Name',
                                 'required' => 'required',
@@ -98,7 +98,7 @@
 
                         <div class="col-sm-12 col-md-4 mb-3">
                             {!! Form::label('father_name', 'Father"s Name *') !!}
-                            {!! Form::text('father_name', null, [
+                            {!! Form::text('father_name', $data['father_name'], [
                                 'class' => 'form-control',
                                 'placeholder' => "Father's Name",
                                 'required' => 'required',
@@ -107,12 +107,15 @@
 
                         <div class="col-sm-12 col-md-4 mb-3">
                             {!! Form::label('father_occupation', 'Father"s Occupation *') !!}
-                            {!! Form::text('father_occupation', null, ['class' => 'form-control', 'placeholder' => "Father's Occupation"]) !!}
+                            {!! Form::text('father_occupation', $data['father_occupation'], [
+                                'class' => 'form-control',
+                                'placeholder' => "Father's Occupation",
+                            ]) !!}
                         </div>
 
                         <div class="col-sm-12 col-md-4 mb-3">
                             {!! Form::label('student_dob', 'Date of Birth (dd/mm/YYYY) *') !!}
-                            {!! Form::text('student_dob', null, [
+                            {!! Form::text('student_dob', $data['student_dob'], [
                                 'class' => 'form-control',
                                 'placeholder' => 'Please select Date Time',
                                 'id' => 'dob',
@@ -122,7 +125,7 @@
 
                         <div class="col-sm-12 col-md-4 mb-3">
                             {!! Form::label('phone', 'Mobile Numbe *') !!}
-                            {!! Form::text('phone', null, [
+                            {!! Form::text('phone', $data['phone'], [
                                 'class' => 'form-control valid',
                                 'maxlength' => '10',
                                 'placeholder' => 'Mobile Number',
@@ -135,13 +138,13 @@
                             {!! Form::label('gender', 'Gender') !!}
                             <div class="my-2">
                                 <label class="form-check form-check-inline">
-                                    {!! Form::radio('gender', 'male', true, ['class' => 'form-check-input']) !!} Male
+                                    {!! Form::radio('gender', 'male', $data['gender'] === 'male', ['class' => 'form-check-input']) !!} Male
                                 </label>
                                 <label class="form-check form-check-inline">
-                                    {!! Form::radio('gender', 'female', false, ['class' => 'form-check-input']) !!} Female
+                                    {!! Form::radio('gender', 'female', $data['gender'] === 'female', ['class' => 'form-check-input']) !!} Female
                                 </label>
                                 <label class="form-check form-check-inline">
-                                    {!! Form::radio('gender', 'other', false, ['class' => 'form-check-input']) !!} Other
+                                    {!! Form::radio('gender', 'other', $data['gender'] === 'other', ['class' => 'form-check-input']) !!} Other
                                 </label>
                             </div>
                         </div>
@@ -169,7 +172,7 @@
 
                         <div class="col-sm-12 col-md-4 mb-3">
                             {!! Form::label('address1', 'Address (Line1) *') !!}
-                            {!! Form::text('address1', null, [
+                            {!! Form::text('address1', $data['address1'], [
                                 'class' => 'form-control',
                                 'placeholder' => 'Address (Line1)',
                                 'required' => 'required',
@@ -178,7 +181,7 @@
 
                         <div class="col-sm-12 col-md-4 mb-3">
                             {!! Form::label('address2', 'Address (Line2) *') !!}
-                            {!! Form::text('address2', null, [
+                            {!! Form::text('address2', $data['address2'], [
                                 'class' => 'form-control',
                                 'placeholder' => 'Address (Line2)',
                             ]) !!}
@@ -186,7 +189,7 @@
 
                         <div class="col-sm-12 col-md-4 mb-3">
                             {!! Form::label('state_id', 'State', ['class' => 'form-label']) !!}
-                            {!! Form::select('state_id', $states->pluck('name', 'id'), null, [
+                            {!! Form::select('state_id', $states->pluck('name', 'id'), $data['district']->state_id, [
                                 'class' => 'form-select',
                                 'id' => 'state_id',
                                 'required',
@@ -206,12 +209,12 @@
 
                         <div class="col-sm-12 col-md-4 mb-3">
                             {!! Form::label('email', 'Email *') !!}
-                            {!! Form::email('email', null, ['class' => 'form-control', 'placeholder' => 'Email']) !!}
+                            {!! Form::email('email', $data['email'], ['class' => 'form-control', 'placeholder' => 'Email']) !!}
                         </div>
 
                         <div class="col-sm-12 col-md-4 mb-3">
                             {!! Form::label('wphone', 'Whatsapp Numbe *') !!}
-                            {!! Form::text('wphone', null, [
+                            {!! Form::text('wphone', $data['wphone'], [
                                 'class' => 'form-control valid',
                                 'maxlength' => '10',
                                 'placeholder' => 'Whatsapp Number',
@@ -225,7 +228,7 @@
                         <div class="row mb-3">
                             <div class="col-3">
                                 {!! Form::label('qualification', 'Education', ['class' => 'form-label']) !!}
-                                {!! Form::select('qualification', $level->pluck('name', 'id'), null, [
+                                {!! Form::select('qualification', $level->pluck('name', 'id'), $data['qualification'], [
                                     'class' => 'form-select',
                                     'placeholder' => 'Select Education',
                                 ]) !!}
@@ -233,11 +236,14 @@
 
                             <div class="col-3">
                                 {!! Form::label('board_university', 'Board/University') !!}
-                                {!! Form::text('board_university', null, ['class' => 'form-control', 'placeholder' => 'Board/University']) !!}
+                                {!! Form::text('board_university', $data['board_university'], [
+                                    'class' => 'form-control',
+                                    'placeholder' => 'Board/University',
+                                ]) !!}
                             </div>
                             <div class="col-3">
                                 {!! Form::label('year_of_passing', 'Year of Passing') !!}
-                                {!! Form::number('year_of_passing', null, [
+                                {!! Form::number('year_of_passing', $data['year_of_passing'], [
                                     'class' => 'form-control',
                                     'placeholder' => 'Year of Passing',
                                     'max' => now()->format('Y'),
@@ -245,7 +251,7 @@
                             </div>
                             <div class="col-3">
                                 {!! Form::label('percentage', 'Percentage (%)') !!}
-                                {!! Form::number('percentage', null, [
+                                {!! Form::number('percentage', $data['percentage'], [
                                     'class' => 'form-control',
                                     'placeholder' => 'Percentage (%)',
                                     'max' => '100',
@@ -255,7 +261,7 @@
 
                         <div class="col-sm-12">
                             {!! Form::label('pqualification', 'Professional Qualification') !!}
-                            {!! Form::text('pqualification', null, [
+                            {!! Form::text('pqualification', $data['pqualification'], [
                                 'class' => 'form-control',
                                 'placeholder' => 'Professional Qualification',
                             ]) !!}
@@ -297,9 +303,24 @@
             });
         }
 
-        const district_id = "{{ route('students.district', $data['district_id']) }}";
+        const district_id = "{{ route('students.district', $data['district']->state_id) }}";
         makeAjaxRequest(district_id, function(response) {
             SelectOption(response, $('[name="district_id"]'), "name");
+            $('[name="district_id"]').val({{ $data['district_id'] }})
+        });
+
+        const branch_id = "{{ route('students.branch-code', $data['branch_id']) }}";
+        makeAjaxRequest(branch_id, function(response) {
+            $('#code').val(response.code);
+        });
+
+        const course_id = "{{ route('students.course-code', $data['course_id']) }}";
+        makeAjaxRequest(course_id, function(response) {
+            $('[name="course_name"]').val(response.name);
+            $('[name="cduration"]').val(`${response.course_duration} ${response.duration_time}`);
+            $('[name="total_fee"]').val(response.total_fee);
+            $('[name="course_type"]').val(response.course_type);
+            $('[name="eligibility"]').val(response.eligibility);
         });
 
         $("#state_id").change(function() {
@@ -309,12 +330,6 @@
                 SelectOption(response, $('[name="district_id"]'), "name");
             });
         });
-
-        const branch_id = "{{ route('students.branch-code', $data['branch_id']) }}";
-        makeAjaxRequest(branch_id, function(response) {
-            $('#code').val(response.code);
-        });
-
 
         $('#branch_id').change(function() {
             const cityId = $(this).val();
