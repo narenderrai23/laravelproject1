@@ -137,7 +137,7 @@
                     </tr>
                     <tr>
                         <td class="fw-bold">Branch Address:</td>
-                        <td>{{ $branch->address }},<br> {{ $cities->name }}</td>
+                        <td>{{ $branch->address }},<br></td>
                     </tr>
                 </table>
             </div>

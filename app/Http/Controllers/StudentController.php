@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\Demomail;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 
 class StudentController extends Controller
@@ -48,27 +50,49 @@ class StudentController extends Controller
             ->get();
 
         return DataTables::of($students)
-            ->addColumn('action', function ($state) {
+            ->addColumn('action', function ($student) {
                 return '<div class="btn-group btn-group-sm">
-                <a class="btn btn-success" href="students/' . $state->id . '/edit">
-                  <i class="font-size-10 fas fa-user-edit"></i>
-                </a>
-                <button  class="btn btn-danger" onclick="deleteState(' . $state->id . ')" id="row_' . $state->id . '">
-                    <i class="far fa-trash-alt"></i> 
-                </button>
-                <a class="btn btn-info" href="details-student.php?id=' . $state->id . '">
-                  <i class="font-size-10 fas fa-eye"></i>
-                </a>
-                <button class="btn btn-primary cartificate" onclick="edit(' . $state->enrollment . ')">
-                  <i class="font-size-10 fas fa-certificate
-                  "></i>
-                </button>
-              </div>';
+                    <a class="btn btn-success" href="' . route('students.edit', $student->id) . '">
+                        <i class="font-size-10 fas fa-user-edit"></i>
+                    </a>
+                    <button class="btn btn-danger" onclick="deleteStudent(' . $student->id . ')" id="row_' . $student->id . '">
+                        <i class="far fa-trash-alt"></i> 
+                    </button>
+                    <a class="btn btn-info" href="' . route('students.show', $student->id) . '">
+                        <i class="font-size-10 fas fa-eye"></i>
+                    </a>
+                    <button class="btn btn-primary cartificate" onclick="edit(' . $student->enrollment . ')">
+                        <i class="font-size-10 fas fa-certificate"></i>
+                    </button>
+                </div>';
             })
-            ->rawColumns(['action'])
+            ->addColumn('student_status', function ($student) {
+                $selectElement = '<select class="student_status select2 dropdown-toggle" data-id="' . $student->id . '">';
+                $options = ['complete' => 'Completed', 'running' => 'Running', 'dropout' => 'Drop Out'];
+
+                $selectElement .= implode(array_map(function ($value, $text) use ($student) {
+                    $selected = $student->student_status === $value ? ' selected="selected" disabled="disabled"' : '';
+                    return "<option value='$value'$selected>$text</option>";
+                }, array_keys($options), $options));
+
+                $selectElement .= '</select>';
+                return $selectElement;
+            })
+            ->addColumn('approve', function ($student) {
+                $class = ($student->approve === "yes") ? "success" : "danger";
+                $icon = ($student->approve === "yes") ? "badge-check" : "x";
+                $disabled = ($student->approve === "yes") ? ' disabled' : '';
+
+                return '<button class="text-uppercase badge fs-6 border-0 bg-' . $class . ' approve" data-id="' . $student->id . '"' . $disabled . '>' .
+                    '<i class="bx bx-' . $icon . '"></i>' .
+                    '</button>';
+            })
+            ->addColumn('enrollment', function ($student) {
+                return '<div id="row' . $student->id . '">' . $student->enrollment . '</div>';
+            })
+            ->rawColumns(['action', 'student_status', 'approve', 'enrollment'])
             ->make(true);
     }
-
 
     public function branchCode($id)
     {
@@ -89,20 +113,18 @@ class StudentController extends Controller
         if ($post->approve === 'yes') {
             return response()->json(['status' => false, 'message' => 'Already approved']);
         }
-
         $branch = Branch::find($post->branch_id);
-        if (!isset($branch->city_id)) {
+        if (!isset ($branch->city_id)) {
             return ['status' => false, 'message' => 'Select Correct Branch.'];
         }
 
-        $cities = City::select('code, name')->where('id', $branch->city_id)->first();
-        if (!isset($cities->code)) {
+        $cities = City::select('name', 'code')->where('id', $branch->city_id)->first();
+        if (!isset ($cities->code)) {
             return ['status' => false, 'message' => 'Select Correct City'];
         }
 
         $enrollment = $this->generateEnrollment($cities->code, $post->date_admission, $id);
 
-        $table = 'students';
         $status = 'yes';
         try {
             $mail = Student::where('id', $id)
@@ -179,24 +201,25 @@ class StudentController extends Controller
             'gender' => 'required|in:male,female,other',
             'address1' => 'required|string|max:255',
             'email' => 'required|string|email|unique:students,email|max:255',
-
         ];
 
         $validator = Validator::make($request->all(), $rules);
 
         // Check if validation fails
         if ($validator->fails()) {
-            return ['status' => false, 'message' => $validator->errors()->first(), 'request' => $request->all()];
+            session()->flash('status', true);
+            session()->flash('message', $validator->errors()->first());
+            return view('backend.admin.students.index');
         }
-
 
         $created_by = Auth::user()->email;
         $student_status = 'running';
 
-
         $branch = Branch::where('id', $request->branch_id)->first();
-        if (!$branch || !isset($branch->city_id)) {
-            return ['status' => false, 'message' => "Please fill in all required fields. The field 'Branch' is required."];
+        if (!$branch || !isset ($branch->city_id)) {
+            session()->flash('status', true);
+            session()->flash('message', 'Please fill in all required fields. The field "Branch" is required.');
+            return view('backend.admin.students.index');
         }
 
         $city_id = $branch->city_id;
@@ -205,9 +228,13 @@ class StudentController extends Controller
 
         $lastId = Student::latest()->pluck('id')->first();
         $enrollment = 'New-' . $code . str_pad($lastId + 1, 4, '0', STR_PAD_LEFT);
+
         if (!$enrollment) {
-            return ['status' => false, 'message' => "Please fill in all required fields. Error in Enrollment"];
+            session()->flash('status', true);
+            session()->flash('message', 'Please fill in all required fields. Error in Enrollment');
+            return view('backend.admin.students.index');
         }
+
         $course = Course::find($request->course_id);
         $till_date = date('Y-m-d', strtotime($request->date_admission . ' +' . $course->course_duration . ' ' . $course->duration_time));
 
@@ -232,8 +259,14 @@ class StudentController extends Controller
             'student_status' => $student_status,
             'created_by' => $created_by,
             'till_date' => $till_date,
-            'profile_image' => $request->profile_image,
         ];
+
+        if ($request->hasFile('profile_image')) {
+            $profile_image = "students_" . time() . '.' . $request->file('profile_image')->getClientOriginalExtension();
+            $request->file('profile_image')->storeAs('public/students/profile', $profile_image);
+            $studentData['profile_image'] = $profile_image;
+        }
+
 
         $student = Student::create($studentData);
 
@@ -249,15 +282,17 @@ class StudentController extends Controller
             ]);
 
             if ($qualification) {
-                return response()->json(['status' => true, 'message' => 'Student and Qualification added successfully']);
+                session()->flash('status', true);
+                session()->flash('message', 'Student and Qualification added successfully');
             } else {
-                // Handle error if Qualification record creation fails
-                return response()->json(['status' => false, 'message' => 'Failed to add Qualification']);
+                session()->flash('status', true);
+                session()->flash('message', 'Failed to add Qualification');
             }
         } else {
-            // Handle error if Student record creation fails
-            return response()->json(['status' => false, 'message' => 'Failed to add Student']);
+            session()->flash('status', true);
+            session()->flash('message', 'Failed to add Student');
         }
+        return view('backend.admin.students.index');
     }
 
     /**
@@ -273,7 +308,6 @@ class StudentController extends Controller
      */
     public function edit($id)
     {
-        // $data = Student::with('district')->find($id);
         $data = Student::select('students.*', 'districts.state_id', 'qualifications.*')
             ->join('districts', 'students.district_id', '=', 'districts.id')
             ->join('qualifications', 'students.id', '=', 'qualifications.student_id')
@@ -291,7 +325,90 @@ class StudentController extends Controller
      */
     public function update(Request $request, Student $student)
     {
-        //
+
+        $rules = [
+            'name' => 'required|string|max:255',
+            'course_name' => 'required|string|max:255',
+            'branch_id' => 'required|integer',
+            'student_dob' => 'required|date',
+            'phone' => 'required|string|max:20',
+            'district_id' => 'required|integer',
+            'wphone' => 'nullable|string|max:20',
+            'date_admission' => 'required|date',
+            'father_name' => 'nullable|string|max:255',
+            'gender' => 'required|in:male,female,other',
+            'address1' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255',
+            'profile_image' => 'nullable|mimes:jpg,bmp,png'
+
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+
+        // Check if validation fails
+        if ($validator->fails()) {
+            return ['status' => false, 'message' => $validator->errors()->first(), 'request' => $request->all()];
+        }
+
+        $course = Course::find($request->course_id);
+        $till_date = date('Y-m-d', strtotime($request->date_admission . ' +' . $course->course_duration . ' ' . $course->duration_time));
+
+        $studentData = [
+            'date_admission' => $request->date_admission,
+            'course_id' => $request->course_id,
+            'branch_id' => $request->branch_id,
+            'name' => $request->name,
+            'father_name' => $request->father_name,
+            'father_occupation' => $request->father_occupation,
+            'student_dob' => $request->student_dob,
+            'gender' => $request->gender,
+            'address1' => $request->address1,
+            'address2' => $request->address2,
+            'district_id' => $request->district_id,
+            'phone' => $request->phone,
+            'wphone' => $request->wphone,
+            'email' => $request->email,
+            'qualification' => $request->qualification,
+            'pqualification' => $request->pqualification,
+            'till_date' => $till_date,
+        ];
+
+        if ($request->hasFile('profile_image')) {
+            $old_image = Student::select('profile_image')->where('id', $student->id)->first();
+            if (File::exists('storage/students/profile/' . $old_image->profile_image)) {
+                File::delete('storage/students/profile/' . $old_image->profile_image);
+            }
+
+            $profile_image = "students_" . time() . '.' . $request->file('profile_image')->getClientOriginalExtension();
+            $request->file('profile_image')->storeAs('public/students/profile', $profile_image);
+            $studentData['profile_image'] = $profile_image;
+        }
+        $student->update($studentData);
+        if ($student) {
+            $qualification = Qualification::updateOrCreate(
+                ['student_id' => $student->id],
+                [
+                    'qualification' => $request->qualification,
+                    'board_university' => $request->board_university,
+                    'year_of_passing' => $request->year_of_passing,
+                    'percentage' => $request->percentage
+                ]
+            );
+
+            if ($qualification) {
+                session()->flash('status', true);
+                session()->flash('message', 'Student and Qualification updated successfully');
+                return view('backend.admin.students.index');
+            } else {
+                // Handle error if Qualification record update/creation fails
+                return response()->json(['status' => false, 'message' => 'Failed to update Qualification']);
+            }
+        } else {
+            // Handle error if Student record update fails
+            return response()->json(['status' => false, 'message' => 'Failed to update Student']);
+        }
+
+
     }
 
     /**

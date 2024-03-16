@@ -5,7 +5,12 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <!-- alertifyjs Css -->
-    <link href="../assets/libs/alertifyjs/build/css/alertify.min.css" rel="stylesheet" type="text/css" />
+    <!-- alertifyjs Css -->
+    <link href="{{ asset('assets/libs/alertifyjs/build/css/alertify.min.css') }}" rel="stylesheet" type="text/css" />
+    <!-- alertifyjs default themes  Css -->
+    <link href="{{ asset('assets/libs/alertifyjs/build/css/themes/default.min.css') }}" rel="stylesheet" type="text/css" />
+
+    <link href="{{ asset('assets/libs/sweetalert2/sweetalert2.min.css') }}" rel="stylesheet" type="text/css" />
 @endpush
 @push('styles')
     <style>
@@ -32,6 +37,14 @@
 @endpush
 @section('main')
     <div class="row">
+        @if (session()->has('status'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session()->get('message') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {{ session()->forget('status', 'message') }}
+        @endif
+
         <div class="col-12 grid-margin stretch-card">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
@@ -67,10 +80,10 @@
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-    <script src="../assets/libs/alertifyjs/build/alertify.min.js"></script>
+    <script src="{{ asset('assets/libs/alertifyjs/build/alertify.min.js') }}"></script>
 
     <!-- Sweet Alerts js -->
-    <script src="../assets/libs/sweetalert2/sweetalert2.min.js"></script>
+    <script src="{{ asset('assets/libs/sweetalert2/sweetalert2.min.js') }}"></script>
     <script>
         $(document).ready(function() {
             var table = initializeDataTable('#table');
@@ -105,7 +118,7 @@
                     data: "id"
                 },
                 {
-                    render: renderEnrollmentColumn
+                    data: "enrollment"
                 },
                 {
                     data: "name"
@@ -123,53 +136,22 @@
                     data: 'date_admission',
                 },
                 {
-                    render: renderApprovalColumn
+                    data: 'approve'
                 },
                 {
                     data: 'action',
                 },
                 {
-                    render: renderStudentStatusColumn
+                    data: 'student_status',
                 },
             ];
             return baseColumns;
         }
 
-        function renderApprovalColumn(data, type, row) {
-            return '<button class="text-uppercase badge fs-6 border-0 bg-' + (row.approve === "yes" ? "success" :
-                    "danger") + ' approve" data-id="' + row.id + '" ' + (row.approve === "yes" ? "disabled" : "") + '>' +
-                '<i class="bx bx-' + (row.approve === "yes" ? "badge-check" : "x") + '"></i>' +
-                '</button>';
-        }
-
-        function renderEnrollmentColumn(data, type, row) {
-            return '<div id=row' + row.id + '>' + row.enrollment + '</div>';
-        }
-
-        function renderStudentStatusColumn(data, type, row) {
-            var selectElement = $(
-                '<select class="form-select form-select-sm student_status select2 dropdown-toggle"></select>').attr(
-                'data-id', row.id);
-            var options = {
-                'complete': 'Completed',
-                'running': 'Running',
-                'dropout': 'Drop Out'
-            };
-
-            $.each(options, function(value, text) {
-                var option = $('<option></option>').val(value).text(text);
-                if (row.student_status === value) {
-                    option.attr('selected', 'selected').attr('disabled', 'disabled');
-                }
-                selectElement.append(option);
-            });
-
-            return selectElement.prop('outerHTML');
-        }
-
-        function deleteState(stateId) {
+        function deleteStudent(stateId) {
+            const url = "{{ route('students.destroy', ':stateId') }}".replace(':stateId', stateId);
             $.ajax({
-                url: 'students/' + stateId,
+                url: url,
                 type: 'DELETE',
                 success: function(response) {
                     if (response.status) {
@@ -214,7 +196,6 @@
                     running: "text-info",
                     dropout: "text-danger",
                 };
-                console.log(id);
 
                 var currentClasses = Object.values(classes).join(" ");
                 if ($(this).hasClass(currentClasses)) {
@@ -233,7 +214,6 @@
                 };
 
                 const success = function(response) {
-                    console.log(response);
                     if (response.status === true) {
                         const classes = {
                             complete: " bg-success text-light",

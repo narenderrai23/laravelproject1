@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 15, 2024 at 01:34 PM
+-- Generation Time: Mar 16, 2024 at 12:01 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -1185,7 +1185,7 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (16, '2024_03_12_075459_create_education_table', 7),
 (17, '2024_03_12_080931_create_districts_table', 8),
 (18, '2024_03_12_083404_create_qualifications_table', 9),
-(28, '2024_03_12_084258_create_students_table', 10);
+(29, '2024_03_12_084258_create_students_table', 10);
 
 -- --------------------------------------------------------
 
@@ -1242,15 +1242,18 @@ CREATE TABLE `qualifications` (
 INSERT INTO `qualifications` (`id`, `student_id`, `qualification`, `board_university`, `year_of_passing`, `percentage`, `created_at`, `updated_at`) VALUES
 (1, 3, '4', 'Quia voluptate a dol', '1975', '19', '2024-03-14 04:36:58', '2024-03-14 04:36:58'),
 (2, 4, '4', 'Quia voluptate a dol', '2020', '95', '2024-03-14 04:37:45', '2024-03-14 04:37:45'),
-(3, 1, '4', 'Quia voluptate a dol', '2020', '95', '2024-03-14 04:55:00', '2024-03-14 04:55:00'),
+(3, 1, '4', 'Fuga Et ea molestia', '1976', '36', '2024-03-14 04:55:00', '2024-03-16 04:02:52'),
 (4, 1, '4', 'Quia voluptate a dol', '2020', '95', '2024-03-14 05:02:02', '2024-03-14 05:02:02'),
 (5, 3, '3', 'Eligendi nulla dolor', '1977', '39', '2024-03-14 05:03:42', '2024-03-14 05:03:42'),
 (6, 5, '4', 'Perspiciatis elit', '1995', '51', '2024-03-14 05:17:53', '2024-03-14 05:17:53'),
 (7, 8, '5', 'Libero autem exercit', '2014', '28', '2024-03-14 05:24:26', '2024-03-14 05:24:26'),
 (8, 10, '4', 'Officia consectetur', '1973', '83', '2024-03-14 06:33:33', '2024-03-14 06:33:33'),
 (9, 11, '4', 'Officiis odio sed re', '1977', '80', '2024-03-14 06:34:53', '2024-03-14 06:34:53'),
-(10, 12, '4', 'Perspiciatis et dol', '1973', '92', '2024-03-14 06:35:29', '2024-03-14 06:35:29'),
-(11, 13, NULL, 'Proident ut aut a a', '2010', '96', '2024-03-15 00:32:34', '2024-03-15 00:32:34');
+(10, 12, '5', 'Perspiciatis et dol1', '1971', '91', '2024-03-14 06:35:29', '2024-03-16 00:32:20'),
+(11, 13, NULL, 'Proident ut aut a a', '2010', '96', '2024-03-15 00:32:34', '2024-03-15 00:32:34'),
+(12, 14, '5', 'Vel totam quia ea la', '2014', '86', '2024-03-16 01:51:38', '2024-03-16 01:51:38'),
+(13, 1, '5', 'A sed consequat Dis', '1982', '26', '2024-03-16 02:28:15', '2024-03-16 02:28:15'),
+(14, 2, '5', 'Amet quasi cupidata', '1996', '25', '2024-03-16 05:03:59', '2024-03-16 05:03:59');
 
 -- --------------------------------------------------------
 
@@ -1316,7 +1319,7 @@ CREATE TABLE `students` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `date_admission` date DEFAULT NULL,
   `branch_id` bigint(20) UNSIGNED NOT NULL,
-  `enrollment` varchar(255) DEFAULT NULL,
+  `enrollment` varchar(255) NOT NULL,
   `course_id` bigint(20) UNSIGNED NOT NULL,
   `till_date` date DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
@@ -1324,7 +1327,7 @@ CREATE TABLE `students` (
   `father_occupation` varchar(255) DEFAULT NULL,
   `student_dob` date NOT NULL,
   `gender` enum('male','female','other') DEFAULT NULL,
-  `profile_image` varchar(255) NOT NULL,
+  `profile_image` varchar(255) DEFAULT NULL,
   `address1` varchar(255) DEFAULT NULL,
   `address2` varchar(255) DEFAULT NULL,
   `district_id` bigint(20) UNSIGNED NOT NULL,
@@ -1345,13 +1348,7 @@ CREATE TABLE `students` (
 --
 
 INSERT INTO `students` (`id`, `date_admission`, `branch_id`, `enrollment`, `course_id`, `till_date`, `name`, `father_name`, `father_occupation`, `student_dob`, `gender`, `profile_image`, `address1`, `address2`, `district_id`, `phone`, `wphone`, `email`, `pqualification`, `qualification`, `student_status`, `created_by`, `approve`, `created_at`, `updated_at`) VALUES
-(1, '2024-03-14', 3, 'RON202403150001', 108, NULL, 'Kyla Preston', 'August Stokes', 'Ex quasi obcaecati e', '2002-06-28', 'female', 'download.png', 'New Delhi', 'Facilis lorem volupt', 40, '9488035261', '9642692547', 'kasij@gmail.com', 'Totam ex et nihil ar', 4, 'running', 'jupame@mailinator.com', 'yes', '2024-03-14 05:02:02', '2024-03-15 04:56:59'),
-(3, '2024-03-14', 5, 'BHA202403150003', 109, NULL, 'Bell Duran', 'Hedda Kidd', 'Voluptatem totam tem', '2002-06-28', 'female', 'download.png', 'New Delhi', 'Ea dignissimos aut l', 74, '5054378269', '5689654384', 'cogufuburo@gmail.com', 'Ex eos earum numquam', 3, 'complete', 'jupame@mailinator.com', 'yes', '2024-03-14 05:03:42', '2024-03-15 04:54:38'),
-(5, '2024-03-08', 2, 'RON202403150005', 219, NULL, 'Urielle Sweeney', 'Mara Glover', 'Nesciunt aut cumque', '2002-06-28', 'female', 'admin_image_65d737faa4f08.jfif', 'New Delhi', 'Harum qui qui est q', 38, '6519856803', '5332464297', 'xeparel@gmail.com', 'Dolor sed eum qui mo', 4, 'dropout', 'jupame@mailinator.com', 'yes', '2024-03-14 05:17:53', '2024-03-15 04:53:21'),
-(8, '2024-03-14', 5, 'BHA202403150008', 219, NULL, 'Naida Best', 'Priscilla Elliott', 'Vel consequuntur tem', '2002-06-28', 'female', 'admin_image_65d737faa4f08.jfif', 'New Delhi', 'Eum molestiae amet', 106, '3336068267', '8096546107', 'kefyh@gmail.com', 'Corrupti doloribus', 5, 'running', 'jupame@mailinator.com', 'yes', '2024-03-14 05:24:26', '2024-03-15 04:52:07'),
-(10, '2024-03-14', 5, 'BHA202403150010', 111, '2024-05-14', 'Ina Ayala', 'McKenzie Salinas', 'Omnis non at vero do', '2002-06-28', 'female', 'download.png', 'New Delhi', 'Ut tempor ex similiq', 106, '3576875059', '5752626415', 'tuxyreruhe@gmail.com', 'Nisi voluptatem cons', 4, 'dropout', 'jupame@mailinator.com', 'yes', '2024-03-14 06:33:33', '2024-03-15 05:39:42'),
-(11, '2024-03-14', 5, 'BHA202403150011', 208, '2025-03-14', 'Mohammad Carver', 'Deirdre Bell', 'Sunt quas consectetu', '2002-06-28', 'female', 'download.png', 'New Delhi', 'Modi in aut sequi de', 81, '1683865095', '9085569237', 'koqorivip@gmail.com', 'Ab id ratione accusa', 4, 'dropout', 'jupame@mailinator.com', 'yes', '2024-03-14 06:34:53', '2024-03-15 05:39:36'),
-(12, '2024-03-14', 5, 'BHA202403150012', 108, '2024-05-14', 'Edward Little', 'Isabelle Cotton', 'Labore dolor ad exce', '2002-06-28', 'female', 'download.png', 'New Delhi', 'Ea minus vero necess', 48, '2448716128', '3082294582', 'novarevyx@gmail.com', 'Ipsum enim magna ac', 4, 'dropout', 'jupame@mailinator.com', 'yes', '2024-03-14 06:35:29', '2024-03-15 05:33:59');
+(2, '2024-03-16', 5, 'BHA202403160002', 219, '2025-03-16', 'Dakota Pena', 'Erin Wise', 'Sit alias optio en', '2002-06-28', 'female', 'students_1710585848.jfif', 'New Delhi', 'Laboris cupidatat ve', 48, '6648311976', '6722756625', 'diwopu@gmail.com', 'Et qui qui aliquip s', 5, 'dropout', 'jupame@mailinator.com', 'yes', '2024-03-16 05:03:59', '2024-03-16 05:25:29');
 
 -- --------------------------------------------------------
 
@@ -1468,6 +1465,7 @@ ALTER TABLE `states`
 --
 ALTER TABLE `students`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `students_enrollment_unique` (`enrollment`),
   ADD UNIQUE KEY `students_email_unique` (`email`),
   ADD KEY `students_branch_id_foreign` (`branch_id`),
   ADD KEY `students_course_id_foreign` (`course_id`),
@@ -1530,7 +1528,7 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -1542,7 +1540,7 @@ ALTER TABLE `personal_access_tokens`
 -- AUTO_INCREMENT for table `qualifications`
 --
 ALTER TABLE `qualifications`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `states`
@@ -1554,7 +1552,7 @@ ALTER TABLE `states`
 -- AUTO_INCREMENT for table `students`
 --
 ALTER TABLE `students`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `users`

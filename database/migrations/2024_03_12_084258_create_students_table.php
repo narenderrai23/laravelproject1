@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->date('date_admission')->nullable();
             $table->foreignId('branch_id')->constrained()->cascadeOnDelete();
-            $table->string('enrollment');
+            $table->string('enrollment')->unique();
             $table->foreignId('course_id')->constrained()->cascadeOnDelete();
             $table->date('till_date')->nullable();
             $table->string('name')->nullable();
@@ -22,7 +22,7 @@ return new class extends Migration {
             $table->string('father_occupation')->nullable();
             $table->date('student_dob');
             $table->enum('gender', ['male', 'female', 'other'])->nullable();
-            $table->string('profile_image');
+            $table->string('profile_image')->nullable();
             $table->string('address1')->nullable();
             $table->string('address2')->nullable();
             $table->foreignId('district_id')->constrained()->cascadeOnDelete();
@@ -33,7 +33,7 @@ return new class extends Migration {
             $table->unsignedBigInteger('qualification')->nullable();
             $table->enum('student_status', ['running', 'complete', 'dropout'])->default('running');
             $table->string('created_by')->nullable();
-            $table->enum('approve', ['no', 'yes']);
+            $table->enum('approve', ['no', 'yes'])->default('no');
             $table->timestamps();
         });
     }

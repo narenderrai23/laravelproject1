@@ -12,17 +12,19 @@
         <div class="col-lg-12">
             <div class="card">
                 <div class="card-body">
-                    {{ $data }}
                     {!! Form::open([
-                        'route' => 'students.update',
+                        'route' => ['students.update', $data['student_id']],
                         'method' => 'POST',
-                        'id' => 'addForm',
+                        'enctype' => 'multipart/form-data',
                         'class' => 'needs-validation',
+                        // 'files' => true,
                         'novalidate',
                     ]) !!}
+
+                    @csrf
+                    @method('PUT')
                     <div class="row">
                         <div class="col-sm-12 headinginfo h4 py-3 my-4">1. Branch/student Details</div>
-
                         <div class="col-sm-12 col-md-4 mb-3">
                             {!! Form::label('date_admission', 'Date Of Admission', ['class' => 'form-label']) !!}
                             {!! Form::text('date_admission', $data['date_admission'], [
@@ -155,15 +157,14 @@
                                 'class' => 'form-control',
                                 'id' => 'profile_image',
                                 'accept' => 'image/*',
-                                'required' => 'required',
                             ]) !!}
                         </div>
 
                         <div class="col-sm-12 col-md-4 mb-3">
                             <div class="row">
                                 <div class="col-sm-7" id="spreview">
-                                    <img src="" alt="Preview"
-                                        style="max-width: 150px; max-height: 150px; display: none;" id="imagePreview">
+                                    <img src="{{ asset('storage/students/profile/' . $data['profile_image']) }}" alt="Preview"
+                                        style="max-width: 150px; max-height: 150px;" id="imagePreview">
                                 </div>
                             </div>
                         </div>
@@ -269,7 +270,7 @@
 
                     </div>
                     <div class="d-flex align-items-start gap-3 mt-4">
-                        {!! Form::submit('Submit', ['class' => 'btn btn-primary w-sm ms-auto', 'name' => 'addbtn']) !!}
+                        {!! Form::submit('Submit', ['class' => 'btn btn-primary w-sm ms-auto']) !!}
                     </div>
                     {!! Form::close() !!}
                 </div>
